@@ -1,643 +1,625 @@
-
-@extends('_layouts.master')
+@extends('layouts.master')
+@section('title')
+    @lang('translation.analytics')
+@endsection
+@section('css')
+    <link href="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+@endsection
 @section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 style="color:green;">Project's Green Building Assurance Performance</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+    @component('components.breadcrumb')
+        @slot('li_1')
+            Dashboards
+        @endslot
+        @slot('title')
+        <div class="text-green-heading">Project's Green Building Assurance Performances</div>
+        @endslot
+    @endcomponent
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-lightblue">
-              <div class="inner">
-                <h3>150</h3>
+    <div class="row">
+        <div class="col-xxl-5">
+            <div class="d-flex flex-column h-100">
+                <div class="row h-100">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="card-header align-items-center d-flex">
+                                    <h4 class="card-title mb-0 flex-grow-1">Major Focus Areas</h4>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="btn btn-soft-primary btn-sm">
+                                            More Info
+                                        </button>
+                                    </div>
+                                </div><!-- end card header -->
 
-                <p>Projects in Planning Phase</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-lightblue">
-              <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Projects in Design Phase</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-lightblue">
-              <div class="inner">
-                <h3>44</h3>
-
-                <p>Projects in Construction Phase</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-lightblue">
-              <div class="inner">
-                <h3>65</h3>
-
-                <p>System Users Registered</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-        </div>
-        <!-- /.row -->
-        <!-- Main row -->
-        <div class="row">
-          <!-- Left col -->
-          <section class="col-lg-7 connectedSortable">
-            <!-- Custom tabs (Charts with tabs)-->
-            <div class="card">
-             <div class="card-body pb-0">
-          <div class="row">
-            
-            <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-              <div class="card bg-light d-flex flex-fill">
-                <div class="card-header text-muted border-bottom-0">
-                  FOCUS AREAS
-                </div>
-                <div class="card-body pt-0">
-                  <div class="row">
-                    <div>
-                      
-                      Structural Safety and Safe Location: Evaluate and establish minimum design guidelines for disaster resilience and enhance baseline qualities of HVRA’s. 
-                    </div>
-                    
-                  </div>
-                </div>
-                
-              </div>
-            </div>
-             <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-              <div class="card bg-light d-flex flex-fill">
-                <div class="card-header text-muted border-bottom-0">
-                  FOCUS AREAS
-                </div>
-                <div class="card-body pt-0">
-                  <div class="row">
-                    <div>
-                      Minimum Design Standards: Establish minimum design standards/guidelines  by project typologies for use in planning, programming and designing.
-
-                      </div>
-                    
-                  </div>
-                </div>
-                
-              </div>
-            </div>
-             <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
-              <div class="card bg-light d-flex flex-fill">
-                <div class="card-header text-muted border-bottom-0">
-                  FOCUS AREAS
-                </div>
-                <div class="card-body pt-0">
-                  <div class="row">
-                    <div>
-                    Quality of Life Standards: Agree standards for well-being needs (i.e., personal space, environmental factors) for occupant comfort, health and safety.
-
-                    </div>
-                    
-                  </div>
-                </div>
-                
-              </div>
-            </div>
-            
-            
-          </div>
-        </div>
-            </div>
-            <!-- /.card -->
-
-            <!-- DIRECT CHAT -->
-            <div class="card direct-chat direct-chat-primary">
-              <div class="card-header">
-                <h3 class="card-title">Direct Chat</h3>
-
-                <div class="card-tools">
-                  <span title="3 New Messages" class="badge badge-primary">3</span>
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" title="Contacts" data-widget="chat-pane-toggle">
-                    <i class="fas fa-comments"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <!-- Conversations are loaded here -->
-                <div class="direct-chat-messages">
-                  <!-- Message. Default to the left -->
-                  <div class="direct-chat-msg">
-                    <div class="direct-chat-infos clearfix">
-                      <span class="direct-chat-name float-left">Alexander Pierce</span>
-                      <span class="direct-chat-timestamp float-right">23 Jan 2:00 pm</span>
-                    </div>
-                    <!-- /.direct-chat-infos -->
-                    <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image">
-                    <!-- /.direct-chat-img -->
-                    <div class="direct-chat-text">
-                      Is this template really for free? That's unbelievable!
-                    </div>
-                    <!-- /.direct-chat-text -->
-                  </div>
-                  <!-- /.direct-chat-msg -->
-
-                  <!-- Message to the right -->
-                  <div class="direct-chat-msg right">
-                    <div class="direct-chat-infos clearfix">
-                      <span class="direct-chat-name float-right">Sarah Bullock</span>
-                      <span class="direct-chat-timestamp float-left">23 Jan 2:05 pm</span>
-                    </div>
-                    <!-- /.direct-chat-infos -->
-                    <img class="direct-chat-img" src="dist/img/user3-128x128.jpg" alt="message user image">
-                    <!-- /.direct-chat-img -->
-                    <div class="direct-chat-text">
-                      You better believe it!
-                    </div>
-                    <!-- /.direct-chat-text -->
-                  </div>
-                  <!-- /.direct-chat-msg -->
-
-                  <!-- Message. Default to the left -->
-                  <div class="direct-chat-msg">
-                    <div class="direct-chat-infos clearfix">
-                      <span class="direct-chat-name float-left">Alexander Pierce</span>
-                      <span class="direct-chat-timestamp float-right">23 Jan 5:37 pm</span>
-                    </div>
-                    <!-- /.direct-chat-infos -->
-                    <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image">
-                    <!-- /.direct-chat-img -->
-                    <div class="direct-chat-text">
-                      Working with AdminLTE on a great new app! Wanna join?
-                    </div>
-                    <!-- /.direct-chat-text -->
-                  </div>
-                  <!-- /.direct-chat-msg -->
-
-                  <!-- Message to the right -->
-                  <div class="direct-chat-msg right">
-                    <div class="direct-chat-infos clearfix">
-                      <span class="direct-chat-name float-right">Sarah Bullock</span>
-                      <span class="direct-chat-timestamp float-left">23 Jan 6:10 pm</span>
-                    </div>
-                    <!-- /.direct-chat-infos -->
-                    <img class="direct-chat-img" src="dist/img/user3-128x128.jpg" alt="message user image">
-                    <!-- /.direct-chat-img -->
-                    <div class="direct-chat-text">
-                      I would love to.
-                    </div>
-                    <!-- /.direct-chat-text -->
-                  </div>
-                  <!-- /.direct-chat-msg -->
-
-                </div>
-                <!--/.direct-chat-messages-->
-
-                <!-- Contacts are loaded here -->
-                <div class="direct-chat-contacts">
-                  <ul class="contacts-list">
-                    <li>
-                      <a href="#">
-                        <img class="contacts-list-img" src="dist/img/user1-128x128.jpg" alt="User Avatar">
-
-                        <div class="contacts-list-info">
-                          <span class="contacts-list-name">
-                            Count Dracula
-                            <small class="contacts-list-date float-right">2/28/2015</small>
-                          </span>
-                          <span class="contacts-list-msg">How have you been? I was...</span>
+                                <div class="row align-items-end">
+                                    <div class="col-sm-8">
+                                        <div class="p-3">
+                                            <img src="{{ URL::asset('build/images/circle.png') }}"
+                                                class="img-fluid" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="px-3">
+                                            <img src="{{ URL::asset('build/images/user-illustarator-2.png') }}"
+                                                class="img-fluid" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- end card-body-->
                         </div>
-                        <!-- /.contacts-list-info -->
-                      </a>
-                    </li>
-                    <!-- End Contact Item -->
-                    <li>
-                      <a href="#">
-                        <img class="contacts-list-img" src="dist/img/user7-128x128.jpg" alt="User Avatar">
+                    </div> <!-- end col-->
+                </div> <!-- end row-->
 
-                        <div class="contacts-list-info">
-                          <span class="contacts-list-name">
-                            Sarah Doe
-                            <small class="contacts-list-date float-right">2/23/2015</small>
-                          </span>
-                          <span class="contacts-list-msg">I will be waiting for...</span>
-                        </div>
-                        <!-- /.contacts-list-info -->
-                      </a>
-                    </li>
-                    <!-- End Contact Item -->
-                    <li>
-                      <a href="#">
-                        <img class="contacts-list-img" src="dist/img/user3-128x128.jpg" alt="User Avatar">
-
-                        <div class="contacts-list-info">
-                          <span class="contacts-list-name">
-                            Nadia Jolie
-                            <small class="contacts-list-date float-right">2/20/2015</small>
-                          </span>
-                          <span class="contacts-list-msg">I'll call you back at...</span>
-                        </div>
-                        <!-- /.contacts-list-info -->
-                      </a>
-                    </li>
-                    <!-- End Contact Item -->
-                    <li>
-                      <a href="#">
-                        <img class="contacts-list-img" src="dist/img/user5-128x128.jpg" alt="User Avatar">
-
-                        <div class="contacts-list-info">
-                          <span class="contacts-list-name">
-                            Nora S. Vans
-                            <small class="contacts-list-date float-right">2/10/2015</small>
-                          </span>
-                          <span class="contacts-list-msg">Where is your new...</span>
-                        </div>
-                        <!-- /.contacts-list-info -->
-                      </a>
-                    </li>
-                    <!-- End Contact Item -->
-                    <li>
-                      <a href="#">
-                        <img class="contacts-list-img" src="dist/img/user6-128x128.jpg" alt="User Avatar">
-
-                        <div class="contacts-list-info">
-                          <span class="contacts-list-name">
-                            John K.
-                            <small class="contacts-list-date float-right">1/27/2015</small>
-                          </span>
-                          <span class="contacts-list-msg">Can I take a look at...</span>
-                        </div>
-                        <!-- /.contacts-list-info -->
-                      </a>
-                    </li>
-                    <!-- End Contact Item -->
-                    <li>
-                      <a href="#">
-                        <img class="contacts-list-img" src="dist/img/user8-128x128.jpg" alt="User Avatar">
-
-                        <div class="contacts-list-info">
-                          <span class="contacts-list-name">
-                            Kenneth M.
-                            <small class="contacts-list-date float-right">1/4/2015</small>
-                          </span>
-                          <span class="contacts-list-msg">Never mind I found...</span>
-                        </div>
-                        <!-- /.contacts-list-info -->
-                      </a>
-                    </li>
-                    <!-- End Contact Item -->
-                  </ul>
-                  <!-- /.contacts-list -->
-                </div>
-                <!-- /.direct-chat-pane -->
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer">
-                <form action="#" method="post">
-                  <div class="input-group">
-                    <input type="text" name="message" placeholder="Type Message ..." class="form-control">
-                    <span class="input-group-append">
-                      <button type="button" class="btn btn-primary">Send</button>
-                    </span>
-                  </div>
-                </form>
-              </div>
-              <!-- /.card-footer-->
-            </div>
-            <!--/.direct-chat -->
-
-            <!-- TO DO List -->
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="ion ion-clipboard mr-1"></i>
-                  To Do List
-                </h3>
-
-                <div class="card-tools">
-                  <ul class="pagination pagination-sm">
-                    <li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">&raquo;</a></li>
-                  </ul>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <ul class="todo-list" data-widget="todo-list">
-                  <li>
-                    <!-- drag handle -->
-                    <span class="handle">
-                      <i class="fas fa-ellipsis-v"></i>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </span>
-                    <!-- checkbox -->
-                    <div  class="icheck-primary d-inline ml-2">
-                      <input type="checkbox" value="" name="todo1" id="todoCheck1">
-                      <label for="todoCheck1"></label>
-                    </div>
-                    <!-- todo text -->
-                    <span class="text">Design a nice theme</span>
-                    <!-- Emphasis label -->
-                    <small class="badge badge-danger"><i class="far fa-clock"></i> 2 mins</small>
-                    <!-- General tools such as edit or delete-->
-                    <div class="tools">
-                      <i class="fas fa-edit"></i>
-                      <i class="fas fa-trash-o"></i>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="handle">
-                      <i class="fas fa-ellipsis-v"></i>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </span>
-                    <div  class="icheck-primary d-inline ml-2">
-                      <input type="checkbox" value="" name="todo2" id="todoCheck2" checked>
-                      <label for="todoCheck2"></label>
-                    </div>
-                    <span class="text">Make the theme responsive</span>
-                    <small class="badge badge-info"><i class="far fa-clock"></i> 4 hours</small>
-                    <div class="tools">
-                      <i class="fas fa-edit"></i>
-                      <i class="fas fa-trash-o"></i>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="handle">
-                      <i class="fas fa-ellipsis-v"></i>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </span>
-                    <div  class="icheck-primary d-inline ml-2">
-                      <input type="checkbox" value="" name="todo3" id="todoCheck3">
-                      <label for="todoCheck3"></label>
-                    </div>
-                    <span class="text">Let theme shine like a star</span>
-                    <small class="badge badge-warning"><i class="far fa-clock"></i> 1 day</small>
-                    <div class="tools">
-                      <i class="fas fa-edit"></i>
-                      <i class="fas fa-trash-o"></i>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="handle">
-                      <i class="fas fa-ellipsis-v"></i>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </span>
-                    <div  class="icheck-primary d-inline ml-2">
-                      <input type="checkbox" value="" name="todo4" id="todoCheck4">
-                      <label for="todoCheck4"></label>
-                    </div>
-                    <span class="text">Let theme shine like a star</span>
-                    <small class="badge badge-success"><i class="far fa-clock"></i> 3 days</small>
-                    <div class="tools">
-                      <i class="fas fa-edit"></i>
-                      <i class="fas fa-trash-o"></i>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="handle">
-                      <i class="fas fa-ellipsis-v"></i>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </span>
-                    <div  class="icheck-primary d-inline ml-2">
-                      <input type="checkbox" value="" name="todo5" id="todoCheck5">
-                      <label for="todoCheck5"></label>
-                    </div>
-                    <span class="text">Check your messages and notifications</span>
-                    <small class="badge badge-primary"><i class="far fa-clock"></i> 1 week</small>
-                    <div class="tools">
-                      <i class="fas fa-edit"></i>
-                      <i class="fas fa-trash-o"></i>
-                    </div>
-                  </li>
-                  <li>
-                    <span class="handle">
-                      <i class="fas fa-ellipsis-v"></i>
-                      <i class="fas fa-ellipsis-v"></i>
-                    </span>
-                    <div  class="icheck-primary d-inline ml-2">
-                      <input type="checkbox" value="" name="todo6" id="todoCheck6">
-                      <label for="todoCheck6"></label>
-                    </div>
-                    <span class="text">Let theme shine like a star</span>
-                    <small class="badge badge-secondary"><i class="far fa-clock"></i> 1 month</small>
-                    <div class="tools">
-                      <i class="fas fa-edit"></i>
-                      <i class="fas fa-trash-o"></i>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer clearfix">
-                <button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add item</button>
-              </div>
-            </div>
-            <!-- /.card -->
-          </section>
-          <!-- /.Left col -->
-          <!-- right col (We are only adding the ID to make the widgets sortable)-->
-          <section class="col-lg-5 connectedSortable">
-
-            <!-- Map card -->
-            <div class="card bg-olive">
-              <div class="card-header border-0">
-                <h3 class="card-title">CREAT
-                  <i class="fas fa-map-marker-alt mr-1"></i>
-                  Project Locations
-                </h3>
-                <!-- card tools -->
-                <div class="card-tools">
-                  <button type="button" class="btn btn-primary btn-sm daterange" title="Date range">
-                    <i class="far fa-calendar-alt"></i>
-                  </button>
-                  <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                </div>
-                <!-- /.card-tools -->
-              </div>
-              <div class="card-body">
-                <div id="world-map" style="height: 250px; width: 100%;"></div>
-              </div>
-              <!-- /.card-body-->
-              <div class="card-footer bg-transparent">
                 <div class="row">
-                  <div class="col-4 text-center">
-                    <div id="sparkline-1"></div>
-                    <div class="text-white">Visitors</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <div id="sparkline-2"></div>
-                    <div class="text-white">Online</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <div id="sparkline-3"></div>
-                    <div class="text-white">Sales</div>
-                  </div>
-                  <!-- ./col -->
-                </div>
-                <!-- /.row -->
-              </div>
-            </div>
-            <!-- /.card -->
+                    <div class="col-md-6">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p class="fw-medium text-muted mb-0">Total Projects</p>
+                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
+                                                data-target="28">0</span>k</h2>
+                                        <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
+                                                <i class="ri-arrow-up-line align-middle"></i> 16.24 %
+                                            </span> vs. previous month</p>
+                                    </div>
+                                    <div>
+                                        <div class="avatar-sm flex-shrink-0">
+                                            <span class="avatar-title bg-info-subtle rounded-circle fs-2">
+                                                <i data-feather="users" class="text-info"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
 
-            <!-- solid sales graph -->
-            <div class="card bg-gradient-info">
-              <div class="card-header border-0">
-                <h3 class="card-title">
-                  <i class="fas fa-th mr-1"></i>
-                  Project Construction Dates
-                </h3>
+                    <div class="col-md-6">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p class="fw-medium text-muted mb-0">Planning Phase</p>
+                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
+                                                data-target="10">0</span>k</h2>
+                                        <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
+                                                <i class="ri-arrow-down-line align-middle"></i> 3.96 %
+                                            </span> vs. previous month</p>
+                                    </div>
+                                    <div>
+                                        <div class="avatar-sm flex-shrink-0">
+                                            <span class="avatar-title bg-info-subtle rounded-circle fs-2">
+                                                <i data-feather="activity" class="text-info"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                </div> <!-- end row-->
 
-                <div class="card-tools">
-                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="card-body">
-                <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer bg-transparent">
                 <div class="row">
-                  <div class="col-4 text-center">
-                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
-                           data-fgColor="#39CCCC">
+                    <div class="col-md-6">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p class="fw-medium text-muted mb-0">Design Phase</p>
+                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
+                                            data-target="8">0</span>k</h2>
+                                        </h2>
+                                        <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
+                                                <i class="ri-arrow-down-line align-middle"></i> 0.24 %
+                                            </span> vs. previous month</p>
+                                    </div>
+                                    <div>
+                                        <div class="avatar-sm flex-shrink-0">
+                                            <span class="avatar-title bg-info-subtle rounded-circle fs-2">
+                                                <i data-feather="clock" class="text-info"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
 
-                    <div class="text-white">Mail-Orders</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
-                           data-fgColor="#39CCCC">
-
-                    <div class="text-white">Online</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
-                           data-fgColor="#39CCCC">
-
-                    <div class="text-white">In-Store</div>
-                  </div>
-                  <!-- ./col -->
-                </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.card-footer -->
+                    <div class="col-md-6">
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <p class="fw-medium text-muted mb-0">Construction Phase</p>
+                                        <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
+                                            data-target="10">0</span>k</h2>
+                                        </h2>
+                                        <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
+                                                <i class="ri-arrow-up-line align-middle"></i> 7.05 %
+                                            </span> vs. previous month</p>
+                                    </div>
+                                    <div>
+                                        <div class="avatar-sm flex-shrink-0">
+                                            <span class="avatar-title bg-info-subtle rounded-circle fs-2">
+                                                <i data-feather="external-link" class="text-info"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div> <!-- end card-->
+                    </div> <!-- end col-->
+                </div> <!-- end row-->
             </div>
-            <!-- /.card -->
+        </div> <!-- end col-->
 
-            <!-- Calendar -->
-            <div class="card bg-gradient-success">
-              <div class="card-header border-0">
+        <div class="col-xxl-7">
+            <div class="row h-100">
+                <div class="col-xl-6">
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Projects By Country</h4>
+                            <div class="flex-shrink-0">
+                                <button type="button" class="btn btn-soft-primary btn-sm">
+                                    Export Report
+                                </button>
+                            </div>
+                        </div><!-- end card header -->
 
-                <h3 class="card-title">
-                  <i class="far fa-calendar-alt"></i>
-                  Calendar
-                </h3>
-                <!-- tools card -->
-                <div class="card-tools">
-                  <!-- button with a dropdown -->
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                      <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="dropdown-menu" role="menu">
-                      <a href="#" class="dropdown-item">Add new event</a>
-                      <a href="#" class="dropdown-item">Clear events</a>
-                      <div class="dropdown-divider"></div>
-                      <a href="#" class="dropdown-item">View calendar</a>
+                        <!-- card body -->
+                        <div class="card-body">
+
+                            <div id="users-by-country" data-colors='["--vz-light"]' class="text-center"
+                                style="height: 252px"></div>
+
+                            <div class="table-responsive table-card mt-3">
+                                <table
+                                    class="table table-borderless table-sm table-centered align-middle table-nowrap mb-1">
+                                    <thead
+                                        class="text-muted border-dashed border border-start-0 border-end-0 bg-light-subtle">
+                                        <tr>
+                                            <th>Planning</th>
+                                            <th style="width: 30%;">Design</th>
+                                            <th style="width: 30%;">Construction</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="border-0">
+                                        <tr>
+                                            <td>0-30</td>
+                                            <td>2,250</td>
+                                            <td>4,250</td>
+                                        </tr>
+                                        <tr>
+                                            <td>31-60</td>
+                                            <td>1,501</td>
+                                            <td>2,050</td>
+                                        </tr>
+                                        <tr>
+                                            <td>61-120</td>
+                                            <td>750</td>
+                                            <td>1,600</td>
+                                        </tr>
+                                        <tr>
+                                            <td>121-240</td>
+                                            <td>540</td>
+                                            <td>1,040</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-6">
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Rating by Countries</h4>
+                            <div>
+                                <button type="button" class="btn btn-soft-secondary btn-sm">
+                                    ALL
+                                </button>
+                                <button type="button" class="btn btn-soft-primary btn-sm">
+                                    1M
+                                </button>
+                                <button type="button" class="btn btn-soft-secondary btn-sm">
+                                    6M
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div>
+                                <div id="countries_charts"
+                                    data-colors='["--vz-info", "--vz-info", "--vz-info", "--vz-info", "--vz-danger", "--vz-info", "--vz-info", "--vz-info", "--vz-info", "--vz-info"]'
+                                    class="apex-charts" dir="ltr"></div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div> <!-- end col-->
+
+            </div> <!-- end row-->
+        </div><!-- end col -->
+    </div> <!-- end row-->
+
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header border-0 align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Audiences Metrics</h4>
+                    <div>
+                        <button type="button" class="btn btn-soft-secondary btn-sm">
+                            ALL
+                        </button>
+                        <button type="button" class="btn btn-soft-secondary btn-sm">
+                            1M
+                        </button>
+                        <button type="button" class="btn btn-soft-secondary btn-sm">
+                            6M
+                        </button>
+                        <button type="button" class="btn btn-soft-primary btn-sm">
+                            1Y
+                        </button>
                     </div>
-                  </div>
-                  <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
+                </div><!-- end card header -->
+                <div class="card-header p-0 border-0 bg-light-subtle">
+                    <div class="row g-0 text-center">
+                        <div class="col-6 col-sm-4">
+                            <div class="p-3 border border-dashed border-start-0">
+                                <h5 class="mb-1"><span class="counter-value" data-target="854">0</span>
+                                    <span class="text-success ms-1 fs-12">49%<i
+                                            class="ri-arrow-right-up-line ms-1 align-middle"></i></span>
+                                </h5>
+                                <p class="text-muted mb-0">Avg. Session</p>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-6 col-sm-4">
+                            <div class="p-3 border border-dashed border-start-0">
+                                <h5 class="mb-1"><span class="counter-value" data-target="1278">0</span>
+                                    <span class="text-success ms-1 fs-12">60%<i
+                                            class="ri-arrow-right-up-line ms-1 align-middle"></i></span>
+                                </h5>
+                                <p class="text-muted mb-0">Conversion Rate</p>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-6 col-sm-4">
+                            <div class="p-3 border border-dashed border-start-0 border-end-0">
+                                <h5 class="mb-1"><span class="counter-value" data-target="3">0</span>m
+                                    <span class="counter-value" data-target="40">0</span>sec
+                                    <span class="text-success ms-1 fs-12">37%<i
+                                            class="ri-arrow-right-up-line ms-1 align-middle"></i></span>
+                                </h5>
+                                <p class="text-muted mb-0">Avg. Session Duration</p>
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                </div><!-- end card header -->
+                <div class="card-body p-0 pb-2">
+                    <div>
+                        <div id="audiences_metrics_charts" data-colors='["--vz-success", "--vz-light"]'
+                            class="apex-charts" dir="ltr"></div>
+                    </div>
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+
+        <div class="col-xl-6">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Audiences Sessions by Country</h4>
+                    <div class="flex-shrink-0">
+                        <div class="dropdown card-header-dropdown">
+                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span class="fw-semibold text-uppercase fs-12">Sort by: </span><span
+                                    class="text-muted">Current Week<i class="mdi mdi-chevron-down ms-1"></i></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Today</a>
+                                <a class="dropdown-item" href="#">Last Week</a>
+                                <a class="dropdown-item" href="#">Last Month</a>
+                                <a class="dropdown-item" href="#">Current Year</a>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end card header -->
+                <div class="card-body p-0">
+                    <div>
+                        <div id="audiences-sessions-country-charts" data-colors='["--vz-success", "--vz-info"]'
+                            class="apex-charts" dir="ltr">
+                        </div>
+                    </div>
+                </div><!-- end cardbody -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+    </div><!-- end row -->
+
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Users by Device</h4>
+                    <div class="flex-shrink-0">
+                        <div class="dropdown card-header-dropdown">
+                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span class="text-muted fs-16"><i class="mdi mdi-dots-vertical align-middle"></i></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Today</a>
+                                <a class="dropdown-item" href="#">Last Week</a>
+                                <a class="dropdown-item" href="#">Last Month</a>
+                                <a class="dropdown-item" href="#">Current Year</a>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end card header -->
+                <div class="card-body">
+                    <div id="user_device_pie_charts" data-colors='["--vz-primary", "--vz-warning", "--vz-info"]'
+                        class="apex-charts" dir="ltr"></div>
+
+                    <div class="table-responsive mt-3">
+                        <table class="table table-borderless table-sm table-centered align-middle table-nowrap mb-0">
+                            <tbody class="border-0">
+                                <tr>
+                                    <td>
+                                        <h4 class="text-truncate fs-14 fs-medium mb-0"><i
+                                                class="ri-stop-fill align-middle fs-18 text-primary me-2"></i>Desktop
+                                            Users</h4>
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-0"><i data-feather="users"
+                                                class="me-2 icon-sm"></i>78.56k</p>
+                                    </td>
+                                    <td class="text-end">
+                                        <p class="text-success fw-medium fs-12 mb-0"><i
+                                                class="ri-arrow-up-s-fill fs-5 align-middle"></i>2.08%
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4 class="text-truncate fs-14 fs-medium mb-0"><i
+                                                class="ri-stop-fill align-middle fs-18 text-warning me-2"></i>Mobile
+                                            Users</h4>
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-0"><i data-feather="users"
+                                                class="me-2 icon-sm"></i>105.02k</p>
+                                    </td>
+                                    <td class="text-end">
+                                        <p class="text-danger fw-medium fs-12 mb-0"><i
+                                                class="ri-arrow-down-s-fill fs-5 align-middle"></i>10.52%
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4 class="text-truncate fs-14 fs-medium mb-0"><i
+                                                class="ri-stop-fill align-middle fs-18 text-info me-2"></i>Tablet
+                                            Users</h4>
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-0"><i data-feather="users"
+                                                class="me-2 icon-sm"></i>42.89k</p>
+                                    </td>
+                                    <td class="text-end">
+                                        <p class="text-danger fw-medium fs-12 mb-0"><i
+                                                class="ri-arrow-down-s-fill fs-5 align-middle"></i>7.36%
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Top Referrals Pages</h4>
+                    <div class="flex-shrink-0">
+                        <button type="button" class="btn btn-soft-primary btn-sm">
+                            Export Report
+                        </button>
+                    </div>
                 </div>
-                <!-- /. tools -->
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body pt-0">
-                <!--The calendar -->
-                <div id="calendar" style="width: 100%"></div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </section>
-          <!-- right col -->
-        </div>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
 
-    <section class="content">
-         {{ __("You're logged in!") }}
-         {{ auth()->user()->first_name }}
-    </section>
-@endsection
-@section('js-section')
-@endsection
+                <div class="card-body">
 
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <h6 class="text-muted text-uppercase fw-semibold text-truncate fs-12 mb-3">
+                                Total Referrals Page</h6>
+                            <h4 class="fs- mb-0">725,800</h4>
+                            <p class="mb-0 mt-2 text-muted"><span class="badge bg-success-subtle text-success mb-0">
+                                    <i class="ri-arrow-up-line align-middle"></i> 15.72 %
+                                </span> vs. previous month</p>
+                        </div><!-- end col -->
+                        <div class="col-6">
+                            <div class="text-center">
+                                <img src="{{ URL::asset('build/images/illustrator-1.png') }}" class="img-fluid"
+                                    alt="">
+                            </div>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                    <div class="mt-3 pt-2">
+                        <div class="progress progress-lg rounded-pill">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 25%"
+                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 18%" aria-valuenow="18"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 22%"
+                                aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 16%"
+                                aria-valuenow="16" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 19%" aria-valuenow="19"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div><!-- end -->
+
+                    <div class="mt-3 pt-2">
+                        <div class="d-flex mb-2">
+                            <div class="flex-grow-1">
+                                <p class="text-truncate text-muted fs-14 mb-0"><i
+                                        class="mdi mdi-circle align-middle text-primary me-2"></i>www.google.com
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="mb-0">24.58%</p>
+                            </div>
+                        </div><!-- end -->
+                        <div class="d-flex mb-2">
+                            <div class="flex-grow-1">
+                                <p class="text-truncate text-muted fs-14 mb-0"><i
+                                        class="mdi mdi-circle align-middle text-info me-2"></i>www.youtube.com
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="mb-0">17.51%</p>
+                            </div>
+                        </div><!-- end -->
+                        <div class="d-flex mb-2">
+                            <div class="flex-grow-1">
+                                <p class="text-truncate text-muted fs-14 mb-0"><i
+                                        class="mdi mdi-circle align-middle text-success me-2"></i>www.meta.com
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="mb-0">23.05%</p>
+                            </div>
+                        </div><!-- end -->
+                        <div class="d-flex mb-2">
+                            <div class="flex-grow-1">
+                                <p class="text-truncate text-muted fs-14 mb-0"><i
+                                        class="mdi mdi-circle align-middle text-warning me-2"></i>www.medium.com
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="mb-0">12.22%</p>
+                            </div>
+                        </div><!-- end -->
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-truncate text-muted fs-14 mb-0"><i
+                                        class="mdi mdi-circle align-middle text-danger me-2"></i>Other
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="mb-0">17.58%</p>
+                            </div>
+                        </div><!-- end -->
+                    </div><!-- end -->
+
+                    <div class="mt-2 text-center">
+                        <a href="javascript:void(0);" class="text-muted text-decoration-underline">Show
+                            All</a>
+                    </div>
+
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Top Pages</h4>
+                    <div class="flex-shrink-0">
+                        <div class="dropdown card-header-dropdown">
+                            <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span class="text-muted fs-16"><i class="mdi mdi-dots-vertical align-middle"></i></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Today</a>
+                                <a class="dropdown-item" href="#">Last Week</a>
+                                <a class="dropdown-item" href="#">Last Month</a>
+                                <a class="dropdown-item" href="#">Current Year</a>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end card header -->
+                <div class="card-body">
+                    <div class="table-responsive table-card">
+                        <table class="table align-middle table-borderless table-centered table-nowrap mb-0">
+                            <thead class="text-muted table-light">
+                                <tr>
+                                    <th scope="col" style="width: 62;">Active Page</th>
+                                    <th scope="col">Active</th>
+                                    <th scope="col">Users</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);">/themesbrand/skote-25867</a>
+                                    </td>
+                                    <td>99</td>
+                                    <td>25.3%</td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);">/dashonic/chat-24518</a>
+                                    </td>
+                                    <td>86</td>
+                                    <td>22.7%</td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);">/skote/timeline-27391</a>
+                                    </td>
+                                    <td>64</td>
+                                    <td>18.7%</td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);">/themesbrand/minia-26441</a>
+                                    </td>
+                                    <td>53</td>
+                                    <td>14.2%</td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);">/dashon/dashboard-29873</a>
+                                    </td>
+                                    <td>33</td>
+                                    <td>12.6%</td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);">/doot/chats-29964</a>
+                                    </td>
+                                    <td>20</td>
+                                    <td>10.9%</td>
+                                </tr><!-- end -->
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0);">/minton/pages-29739</a>
+                                    </td>
+                                    <td>10</td>
+                                    <td>07.3%</td>
+                                </tr><!-- end -->
+                            </tbody><!-- end tbody -->
+                        </table><!-- end table -->
+                    </div><!-- end -->
+                </div><!-- end cardbody -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+    </div><!-- end row -->
+@endsection
+@section('script')
+    <!-- apexcharts -->
+    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/jsvectormap/jsvectormap.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/jsvectormap/maps/world-merc.js') }}"></script>
+
+    <!-- dashboard init -->
+    <script src="{{ URL::asset('build/js/pages/dashboard-analytics.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+@endsection

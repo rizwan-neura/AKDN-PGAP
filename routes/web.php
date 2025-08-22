@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('countries', CountryController::class);
     Route::resource('projects', ProjectController::class);
+    
     Route::resource('checklists', ChecklistController::class);
     Route::get('getsubtypes', [ProjectController::class, 'getBuildingSubTypes'])->name('projects.getBuildingSubTypes');  
    
@@ -31,7 +32,17 @@ Route::middleware('auth')->group(function () {
     Route::put('projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
 
     Route::post('projects/saveplanning', [ProjectController::class, 'savePlanningAssessment'])->name('projects.savePlanningAssessment'); 
-    Route::post('projects/delete-planning-file', [ProjectController::class, 'deletePlanningFile'])->name('projects.deletePlanningFile'); 
+    Route::post('projects/delete-planning-file', [ProjectController::class, 'deletePlanningFile'])->name('projects.deletePlanningFile');
+    
+    Route::post('projects/savedesign', [ProjectController::class, 'saveDesignAssessment'])->name('projects.saveDesignAssessment'); 
+    Route::post('projects/delete-design-file', [ProjectController::class, 'deleteDesignFile'])->name('projects.deleteDesignFile');
+
+    Route::post('projects/saveconstruction', [ProjectController::class, 'saveConstructionAssessment'])->name('projects.saveConstructionAssessment'); 
+    Route::post('projects/delete-construction-file', [ProjectController::class, 'deleteConstructionFile'])->name('projects.deleteConstructionFile');
+
+    Route::post('projects/savecomments', [ProjectController::class, 'saveComments'])->name('projects.saveComments'); 
+    Route::post('projects/updatecost', [ProjectController::class, 'updateCost'])->name('projects.updateCost'); 
+    Route::post('projects/store', [ProjectController::class, 'store'])->name('projects.store'); 
 
 
    //Route::post('updatechecklist', [ProjectController::class, 'updateCheckList'])->name('projects.updateCheckList');  

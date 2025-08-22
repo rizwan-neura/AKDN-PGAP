@@ -55,7 +55,7 @@ class PlanningAssessRequest extends FormRequest
         
         // Custom messages
         return [
-            'compliance.required' => 'Please select a checklist status.',
+            'compliance.required' => 'Please select compliance.',
             'planning_uploads.required' => 'File upload is required when status is YES.',
             'planning_uploads.mimes' => 'Only PDF files are allowed.',
         ];

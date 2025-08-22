@@ -13,6 +13,7 @@ class ProjectRequest extends FormRequest
     {
         return true;
     }
+    
 
     /**
      * Get the validation rules that apply to the request.
@@ -21,9 +22,25 @@ class ProjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        //dd($this->step);
+        // Default empty rules
+        $rules = [];
+
+        // If this is a cost update request, validate only cost fields
+        if ($this->has('cost_phase')) {
+            $rules['cost_phase'] = ['required', 'in:cost_at_design,cost_at_construction'];
+            $rules['updatedProjectId'] = ['required', 'exists:projects,id'];
+
+            if ($this->input('cost_phase') === 'cost_at_design') {
+                $rules['cost_at_design'] = ['required', 'numeric', 'min:0'];
+            } elseif ($this->input('cost_phase') === 'cost_at_construction') {
+                $rules['cost_at_construction'] = ['required', 'numeric', 'min:0'];
+            }
+            return $rules; // Return early, no other rules needed
+        }
+
+        // Otherwise (normal project creation or full update)
         if ($this->isMethod('post')) {
-            $rules =  [
+            $rules = [
                 'project_name' => [
                     'required', 'regex:/^[a-zA-Z0-9 ]+$/',
                     'string',
@@ -31,58 +48,18 @@ class ProjectRequest extends FormRequest
                     'max:100',
                     'unique:projects'
                 ],
-                'phase_id' => [
-                    'required'
-                ],
-                'organization_id' => [
-                    'required'
-                ],
-                'date_gpa' => [
-                    'required'
-                ],
-                'start_date' => [
-                    'required'
-                ],
-                'end_date' => [
-                    'required'
-                ],
-                'type_id' => [
-                    'required'
-                ],
-                'construction_cost' => [
-                    'required',
-                    'numeric',
-                    'min:0',
-                    'max:9999.99'
-                ]
+                'phase_id' => ['required'],
+                'organization_id' => ['required'],
+                'date_gpa' => ['required'],
+                'start_date' => ['required'],
+                'end_date' => ['required'],
+                'type_id' => ['required'],
+                'construction_cost' => ['required', 'numeric', 'min:0']
             ];
-        } elseif ($this->isMethod('put')) {
-            /*if ($this->route()->getActionMethod() == 'isActive') {
-                $rules =  [
-                    'is_active' => [
-                        'required',
-                        'in:true,false'
-                    ]
-                ];
-            } 
-                else {*/
-                $rules =  [
-                    'country_name' => [
-                        'required',
-                        'string',
-                        'min:3',
-                        'max:100',
-                        'unique:countries,country_name,' . $this->country
-                    ]
-                ];
-           // }
-        } else {
-            $rules = [];
         }
 
         return $rules;
-    }
-    
+    }      
     public function messages()
     {
         return [
@@ -93,6 +70,13 @@ class ProjectRequest extends FormRequest
             'end_date.required' => 'Please enter End Date.',
             'type_id.required' => 'Please select Building Type.',
             'construction_cost.required' => 'Please enter Construction Cost (USD).',
+
+            'cost_at_design.required' => 'Please enter Cost at Design phase.',
+            'cost_at_construction.required' => 'Please enter Cost at Construction phase.',
+            'cost_phase.required' => 'Cost phase is required.',
+            'cost_phase.in' => 'Invalid cost phase selected.',
+            'updatedProjectId.required' => 'Project ID is required.',
+            'updatedProjectId.exists' => 'The selected project does not exist.',
         ];
     }
 }

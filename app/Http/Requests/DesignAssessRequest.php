@@ -27,13 +27,13 @@ class DesignAssessRequest extends FormRequest
             'indicator_id' => 'required',
             'updatedProjectId' => 'required',
         ];
-
+        //2, 3, 5, 6, 7, 9, 10, 11, 14, 15, 16
          // if compliance is YES against these indicators and file is not uploaded, show error
-         if ($this->compliance === '2' && ($this->indicator_id === "1" || $this->indicator_id === "4" || $this->indicator_id === "6" )) {
+         if ($this->compliance === '2' && ($this->indicator_id === "2" || $this->indicator_id === "3" || $this->indicator_id === "5" || $this->indicator_id === "6" 
+         || $this->indicator_id === "7" || $this->indicator_id === "9" || $this->indicator_id === "10" || $this->indicator_id === "11"
+         || $this->indicator_id === "14" || $this->indicator_id === "15" || $this->indicator_id === "16")) {
             $rules['design_uploads'] = 'required|file|mimes:pdf|max:2048';
-        }else if ($this->indicator_id === '4' && ($this->compliance === "4" || $this->compliance === "5" || $this->compliance === "6" || $this->compliance === "7" )) {
-            $rules['design_uploads'] = 'required|file|mimes:pdf|max:2048';
-        } else {
+        }else {
             $rules['design_uploads'] = 'nullable|file|mimes:pdf|max:2048';
         }
 
@@ -56,8 +56,8 @@ class DesignAssessRequest extends FormRequest
         // Custom messages
         return [
             'compliance.required' => 'Please select a checklist status.',
-            'planning_uploads.required' => 'File upload is required when status is YES.',
-            'planning_uploads.mimes' => 'Only PDF files are allowed.',
+            'design_uploads.required' => 'File upload is required when status is YES.',
+            'design_uploads.mimes' => 'Only PDF files are allowed.',
         ];
     }
 }

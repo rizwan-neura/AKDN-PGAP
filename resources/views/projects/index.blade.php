@@ -62,12 +62,12 @@
                                 @foreach ($data as $row)
                                     <tr>
                                         <td>{{ $row->project_name }}</td>
-                                        <td>{{ $row->phase_name }}</td>
-                                        <td width="20%">{{ $row->organization_name }}</td>
+                                        <td>{{ $row->current_phase->phase_name }}</td>
+                                        <td width="20%">{{ $row->organization->organization_name }}</td>
                                        <td>{{ Carbon\Carbon::parse($row->date_gpa)->format('F j, Y') }}</td>
                                        <td>{{ Carbon\Carbon::parse($row->start_date)->format('F j, Y') }}</td>
                                        <td>{{ Carbon\Carbon::parse($row->end_date)->format('F j, Y') }}</td>
-                                       <td>{{ $row->type_name }}</td>
+                                       <td>{{ $row->building_type->type_name }}</td>
                                         <td>
                                         <a href="{{ route('projects.edit', $row->id) }}" class="btn btn-block btn-info btn-xs">EDIT</a>
                                         <form id="action_delete_{{ $row->id }}" action="" method="post">
