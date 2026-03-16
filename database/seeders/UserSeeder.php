@@ -14,12 +14,26 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'username' => 'superadmin',
-            'first_name' => 'Super',
-            'last_name' => 'Admin',
-            'email' => 'rizwanoo@gmail.com',
-            'password' => Hash::make('123456'),
-        ]);
+        // First user (already in DB — fine)
+        User::firstOrCreate(
+            ['email' => 'rizwanoo@gmail.com'], // Check by email only
+            [
+                'username' => 'superadmin',
+                'first_name' => 'Super',
+                'last_name' => 'Admin',
+                'password' => Hash::make('123456'),
+            ]
+        );
+
+        // Second user (new one)
+        User::firstOrCreate(
+            ['email' => 'test@example.com'], // Only use unique fields here
+            [
+                'username' => 'test1',
+                'first_name' => 'Test',
+                'last_name' => 'Test',
+                'password' => Hash::make('123456'),
+            ]
+        );
     }
 }

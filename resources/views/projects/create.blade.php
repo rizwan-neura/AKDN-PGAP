@@ -179,7 +179,8 @@
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
                                                                 <label for="coordiates" class="form-label">GPS Coordinates</label>
-                                                                <input type="text" name="coordiates" id="coordiates" value="{{old('coordiates')}}" class="form-control">    
+                                                                <input type="text" name="coordinates" id="coordinates" value="{{old('coordinates')}}" class="form-control"> 
+                                                                <div class="invalid-feedback">Please coordinates in decimal</div>   
                                                             </div>
                                                         </div>
                                                         <!--end col-->

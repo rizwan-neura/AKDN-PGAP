@@ -16,9 +16,9 @@
                             <div class="row g-0">
                                 <div class="col-lg-6">
                                     <div class="p-lg-5 p-4 auth-one-bg h-100">
-                                        <div class="bg-overlay"></div>
+                                        <div class="bg-overlay" style="display: none;"></div>
                                         <div class="position-relative h-100 d-flex flex-column">
-                                            <div class="mb-4" style="margin-left: 100px;">
+                                            <div class="mb-4" style="margin-left: 100px;display: none;">
                                                 <a href="index" class="d-block">
                                                     <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="270">
                                                 </a>
@@ -40,6 +40,7 @@
                                                             data-bs-slide-to="2" aria-label="Slide 3"></button>
                                                     </div>
                                                     <div class="carousel-inner text-center text-white-50 pb-5">
+                                                        <div class="bg-overlay" ></div>
                                                         <div class="carousel-item active">
                                                             <p class="fs-15 fst-italic">" Evaluate and establish minimum design guidelines for disaster resilience! "</p>
                                                         </div>
@@ -59,7 +60,17 @@
                                 <!-- end col -->
 
                                 <div class="col-lg-6">
+                                    <div style="margin-left: 220px;margin-top: 20px;">
+                                        <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="100">
+                                    </div>
+                                    <div class="mt-4 text-center">
+                                        <div class="signin-other-title">
+                                            <h5 ></h5>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="p-lg-5 p-4">
+                                        
                                         <div>
                                             <h5 class="text-primary">Welcome !</h5>
                                             <p class="text-green-heading"><b>Project's Green Building Assurance Performance (PGAP).</b></p>
@@ -86,7 +97,7 @@
 
                                                 <div class="mb-3">
                                                     <div class="float-end">
-                                                        <a href="auth-pass-reset-cover" class="text-muted">Forgot
+                                                        <a href="" class="text-muted">Forgot
                                                             password?</a>
                                                     </div>
                                                     <label class="form-label" for="password-input">Password</label>
@@ -111,28 +122,7 @@
                                                 </div>
 
                                                 <div class="mt-4">
-                                                    <button class="btn my-custom-btn w-100" type="submit">Sign In</button>
-                                                </div>
-
-                                                <div class="mt-4 text-center">
-                                                    <div class="signin-other-title">
-                                                        <h5 class="fs-13 mb-4 title">Sign In with</h5>
-                                                    </div>
-
-                                                    <div>
-                                                        <button type="button"
-                                                            class="btn btn-primary btn-icon waves-effect waves-light"><i
-                                                                class="ri-facebook-fill fs-16"></i></button>
-                                                        <button type="button"
-                                                            class="btn btn-danger btn-icon waves-effect waves-light"><i
-                                                                class="ri-google-fill fs-16"></i></button>
-                                                        <button type="button"
-                                                            class="btn btn-dark btn-icon waves-effect waves-light"><i
-                                                                class="ri-github-fill fs-16"></i></button>
-                                                        <button type="button"
-                                                            class="btn btn-info btn-icon waves-effect waves-light"><i
-                                                                class="ri-twitter-fill fs-16"></i></button>
-                                                    </div>
+                                                    <button class="btn btn-success w-100" type="submit">Sign In</button>
                                                 </div>
 
                                             </form>
@@ -140,7 +130,7 @@
 
                                         <div class="mt-5 text-center">
                                             <p class="mb-0">Don't have an account ? <a
-                                                    href="auth-signup-cover"
+                                                    href=""
                                                     class="fw-semibold text-primary text-decoration-underline"> Signup</a>
                                             </p>
                                         </div>

@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 class ProjectChecklistRequest extends FormRequest
 {
     /**
@@ -13,7 +16,7 @@ class ProjectChecklistRequest extends FormRequest
     {
         return true;
     }
-
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -48,5 +51,14 @@ class ProjectChecklistRequest extends FormRequest
             'checklist_uploads.required' => 'File upload is required when status is YES.',
             'checklist_uploads.mimes' => 'Only PDF files are allowed.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'status' => 'error',
+            'message' => 'Validation failed.',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }

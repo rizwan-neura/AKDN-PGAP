@@ -4,11 +4,14 @@ namespace App\Repositories;
 use Carbon\Carbon;
 use App\Models\Project;
 use App\Models\ProjectChecklist;
+use App\Models\PlanningIndicators;
 use App\Models\PlanningAssess;
-use App\Models\DesignAssess;
-use App\Models\ConstructionAssess;
 use App\Models\PlanningComment;
+use App\Models\DesignIndicators;
+use App\Models\DesignAssess;
 use App\Models\DesignComment;
+use App\Models\ConstructionIndicators;
+use App\Models\ConstructionAssess;
 use App\Models\ConstructionComment;
 use App\Models\Thresholds;
 use Illuminate\Support\Facades\DB;
@@ -58,16 +61,26 @@ class ProjectRepository
     public function update($id, $request)
     {
        // dd("repooo");
-        /*
-        $country = $this->getById($id);
-        $country->country_name = $request->country_name;
-
-        DB::transaction(function () use ($country) {
-            $country->save();
-        });
-
-        return $country;
-        */
+        
+        $project = $this->getById($id);
+        $project->project_name = $request->project_name;
+        $project->phase_id = $request->phase_id;
+        $project->assessment_req = $request->assessment_req;
+        $project->organization_id = $request->organization_id;
+        $project->date_gpa = Carbon::parse($request->date_gpa)->format('Y-m-d');
+        $project->start_date = Carbon::parse($request->start_date)->format('Y-m-d');
+        $project->end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+        $project->location = $request->location;
+        $project->coordinates = $request->coordinates;
+        $project->type_id = $request->type_id;
+        $project->sub_type_id = $request->sub_type_id;
+        $project->construction_cost = $request->construction_cost;
+        $project->requirements = $request->requirements;
+        $project->updated_by = auth()->user()->id;
+        DB::transaction(function () use ($project) { $project->save(); });
+        //$lastInsertedId = $project->id;
+        return $project;
+        
     }
 
     public function delete($id)
@@ -113,20 +126,23 @@ class ProjectRepository
         ->first();
 
     }
-    public function getCommentsInfo($project_id,$indicator_id,$comments_for){
+    public function getCommentsInfo($project_id,$indicator_id,$comments_for,$comment_id){
        if($comments_for == 'Planning'){
         return PlanningComment::where('project_id', $project_id)
         ->where('indicator_id', $indicator_id)
+        ->where('id', $comment_id)
         ->first();
        }
        if($comments_for == 'Design'){
         return DesignComment::where('project_id', $project_id)
         ->where('indicator_id', $indicator_id)
+        ->where('id', $comment_id)
         ->first();
        }
        if($comments_for == 'Construction'){
         return ConstructionComment::where('project_id', $project_id)
         ->where('indicator_id', $indicator_id)
+        ->where('id', $comment_id)
         ->first();
        }
     }
@@ -260,6 +276,14 @@ class ProjectRepository
         $finalPlanningScore =  $planningTotalScores * 10 * $fixedWeightPlanning;
         $calculateRating = ($finalPlanningScore / 45)*100; //45%
         $this->insertFinalScoreRating($request->updatedProjectId,'Planning',$finalPlanningScore,$calculateRating);
+
+    }
+    public function saveSummary($request)
+    {
+        $project = Project::find($request->updatedProjectId); 
+            $project->executive_summary = $request->executive_summary;
+            $project->updated_by = auth()->user()->id;
+            $project->save();
 
     }
     public function resetCommentsInfo($request,$dataExists)
@@ -556,6 +580,7 @@ class ProjectRepository
 
     public function getPlanningInfoByProjectId($project_id)
     {
+        /*
         $planningInfo = DB::table('planning_indicators')
         ->leftJoin('planning_assessment', function ($join) use ($project_id) {
             $join->on('planning_indicators.id', '=', 'planning_assessment.indicator_id')
@@ -577,15 +602,45 @@ class ProjectRepository
             'planning_assessment.score',
             'planning_compliances_scores.comp_name',
             'planning_compliances_scores.score as complianceScore',
-            'planning_comments.comments as comments'
+            'planning_comments.comments as comments',
+            'planning_comments.id as comment_id'
         )
         ->get();
-
-
         return $planningInfo;
+        */
+        // Fetch indicators with related data
+        $indicators = PlanningIndicators::with([
+            'assessments' => function ($q) use ($project_id) {
+                $q->where('project_id', $project_id)->with('compliance');
+            },
+            'comments' => function ($q) use ($project_id) {
+                $q->where('project_id', $project_id)->with('user');
+            }
+        ])->get();
+        
+        $planningScoresRatings = $indicators->map(function ($indicator) {
+            $assessment = $indicator->assessments->first();
+            $compliance = $assessment?->compliance;
+        
+            return (object)[
+                'id' => $indicator->id,
+                'ref_no' => $indicator->ref_no,
+                'indicator_name' => $indicator->indicator_name,
+                'is_mandatory' => $indicator->is_mandatory,
+                'indicatorWeightage' => $indicator->weightage * 100,
+                'score' => $assessment?->score,
+                'comp_name' => $compliance?->comp_name,
+                'complianceScore' => $compliance?->score,
+                'comments' => $indicator->comments,
+                'comment_id' => $indicator->comments->first()?->id,
+            ];
+        });
+        return $planningScoresRatings;
+        
     }
     public function getDesignInfoByProjectId($project_id)
     {
+        /*
         $designInfo = DB::table('design_indicators')
         ->leftJoin('design_assessment', function ($join) use ($project_id) {
         $join->on('design_indicators.id', '=', 'design_assessment.indicator_id')
@@ -612,11 +667,45 @@ class ProjectRepository
         'design_comments.comments as comments'
         )
         ->get();
-
         return $designInfo;
+        */
+
+        $indicators = DesignIndicators::with([
+            'assessments' => function ($q) use ($project_id) {
+                $q->where('project_id', $project_id)->with('compliance');
+            },
+            'comments' => function ($q) use ($project_id) {
+                $q->where('project_id', $project_id)->with('user');
+            }
+        ])->get();
+        
+        $designInfo = $indicators->map(function ($indicator) {
+            $assessment = $indicator->assessments->first();
+            $compliance = $assessment?->compliance;
+        
+            return (object)[
+                'id' => $indicator->id,
+                'ref_no' => $indicator->ref_no,
+                'indicator_name' => $indicator->indicator_name,
+                'is_mandatory' => $indicator->is_mandatory,
+                'indicatorWeightage' => $indicator->weightage * 100,
+                'score' => $assessment?->score,
+                'compliances_id' => $assessment?->compliances_id,
+                'file_path' => $assessment?->file_path,
+                'comp_name' => $compliance?->comp_name,
+                'complianceScore' => $compliance?->score,
+                'comments' => $indicator->comments,
+                'comment_id' => $indicator->comments->first()?->id,
+            ];
+        });
+        return $designInfo;
+
+
+
     }
     public function getConstructionInfoByProjectId($project_id)
     {
+        /*
         $designInfo = DB::table('construction_indicators')
         ->leftJoin('construction_assessment', function ($join) use ($project_id) {
         $join->on('construction_indicators.id', '=', 'construction_assessment.indicator_id')
@@ -645,11 +734,42 @@ class ProjectRepository
         ->get();
 
         return $designInfo;
+        */
+        $indicators = ConstructionIndicators::with([
+            'assessments' => function ($q) use ($project_id) {
+                $q->where('project_id', $project_id)->with('compliance');
+            },
+            'comments' => function ($q) use ($project_id) {
+                $q->where('project_id', $project_id)->with('user');
+            }
+        ])->get();
+        
+        $constructionInfo = $indicators->map(function ($indicator) {
+            $assessment = $indicator->assessments->first();
+            $compliance = $assessment?->compliance;
+        
+            return (object)[
+                'id' => $indicator->id,
+                'ref_no' => $indicator->ref_no,
+                'indicator_name' => $indicator->indicator_name,
+                'is_mandatory' => $indicator->is_mandatory,
+                'indicatorWeightage' => $indicator->weightage * 100,
+                'score' => $assessment?->score,
+                'compliances_id' => $assessment?->compliances_id,
+                'file_path' => $assessment?->file_path,
+                'comp_name' => $compliance?->comp_name,
+                'complianceScore' => $compliance?->score,
+                'comments' => $indicator->comments,
+                'comment_id' => $indicator->comments->first()?->id,
+            ];
+        });
+        return $constructionInfo;
     }
 
 
 
     // Get Planning info against Project Id and Indicator Id...
+    /*
     public function getPlanningByProjectIndicator($project_id,$indicator_id,$phaseName)
     {
         $planningInfo = PlanningAssess::select(
@@ -671,8 +791,10 @@ class ProjectRepository
 
         return $planningInfo;
     }
+    */
 
      // Get Desing info against each Project Id and each Indicator Id...
+     /*
      public function getDesignByProjectIndicator($project_id,$indicator_id,$phaseName)
      {
          $planningInfo = DesignAssess::select(
@@ -694,7 +816,9 @@ class ProjectRepository
  
          return $planningInfo;
      }
+         */
      // Get construction info against each Project Id and each Indicator Id...
+     /*
      public function getConstructionByProjectIndicator($project_id,$indicator_id,$phaseName)
      {
          $planningInfo = ConstructionAssess::select(
@@ -716,6 +840,7 @@ class ProjectRepository
  
          return $planningInfo;
      }
+    */
     
     /*
      Get Mandatory Requirement values against Construction cost..

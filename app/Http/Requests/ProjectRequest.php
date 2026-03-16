@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ProjectRequest extends FormRequest
 {
@@ -13,7 +15,14 @@ class ProjectRequest extends FormRequest
     {
         return true;
     }
-    
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'status' => 'error',
+            'message' => 'Validation failed.',
+            'errors' => $validator->errors()
+        ], 422));
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -54,7 +63,8 @@ class ProjectRequest extends FormRequest
                 'start_date' => ['required'],
                 'end_date' => ['required'],
                 'type_id' => ['required'],
-                'construction_cost' => ['required', 'numeric', 'min:0']
+                'construction_cost' => ['required', 'numeric', 'min:0'],
+                'coordinates' => ['decimal:6,6']
             ];
         }
 
@@ -70,9 +80,10 @@ class ProjectRequest extends FormRequest
             'end_date.required' => 'Please enter End Date.',
             'type_id.required' => 'Please select Building Type.',
             'construction_cost.required' => 'Please enter Construction Cost (USD).',
+            'coordinates.required' => 'Please coordinates in decimal.',
 
-            'cost_at_design.required' => 'Please enter Cost at Design phase.',
-            'cost_at_construction.required' => 'Please enter Cost at Construction phase.',
+            'cost_at_design.required' => 'Please enter cost at design phase.',
+            'cost_at_construction.required' => 'Please enter cost at construction phase.',
             'cost_phase.required' => 'Cost phase is required.',
             'cost_phase.in' => 'Invalid cost phase selected.',
             'updatedProjectId.required' => 'Project ID is required.',

@@ -14,6 +14,7 @@ use App\Http\Requests\PlanningAssessRequest;
 use App\Http\Requests\DesignAssessRequest;
 use App\Http\Requests\ConstructionAssessRequest;
 use App\Http\Requests\CommentsRequest;
+use App\Http\Requests\ExecutiveSummaryRequest;
 
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Storage;
@@ -162,7 +163,7 @@ class ProjectController extends Controller
 
                 return response()->json([
                     'status' => 'success',
-                    'message' => $checklist ? 'Checklist updated!' : 'Checklist saved!',
+                    'message' => $checklist ? 'Checklist saved!' : 'Checklist saved!',
                     'file_name' => $filename,
                     'file_url' => $file ? Storage::url($path) : null,
                     'checklist_id' => $request->checklist_id,
@@ -215,16 +216,16 @@ class ProjectController extends Controller
                 //Update existing data...
                 $this->projectRepository->resetPlanningAssessInfo($request,$dataExists);
                 //To show in Review Portion: Get Planning info against Project ID and Indicator ID
-                $planningReviewPortion = $this->projectRepository->getPlanningByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Planning');
+                //$planningReviewPortion = $this->projectRepository->getPlanningByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Planning');
                 
                 return response()->json([
                     'status' => 'success',
                     'message' => $dataExists ? 'Info updated successfully!' : 'Info saved!',
                     'file_name' => $filename,
                     'file_url' => $file ? Storage::url($path) : null,
-                    'indicator_id' => $request->indicator_id,
+                    //'indicator_id' => $request->indicator_id,
                     'can_delete' => $canDelete, 
-                    'planning_review_info' => $planningReviewPortion, 
+                    //'planning_review_info' => $planningReviewPortion, 
                 ]);
             } 
             else {
@@ -232,15 +233,15 @@ class ProjectController extends Controller
                 $request->request->add(['filename' => $filename, 'path' => $path]);
                 $newData = $this->projectRepository->createPlanningAssessmentItem($request);
                 //To show in Review Portion: Get Planning info against Project ID and Indicator ID
-                $planningReviewPortion = $this->projectRepository->getPlanningByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Planning');
+                //$planningReviewPortion = $this->projectRepository->getPlanningByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Planning');
                 return response()->json([
                     'status' => 'success',
                     'message' => $newData ? 'Info saved successfully!' : 'Info saved!',
                     'file_name' => $filename,
                     'file_url' => $file ? Storage::url($path) : null,
-                    'indicator_id' => $request->indicator_id,
+                    //'indicator_id' => $request->indicator_id,
                     'can_delete' => $canDelete,
-                    'planning_review_info' => $planningReviewPortion, 
+                    //'planning_review_info' => $planningReviewPortion, 
                 ]);
                 
             }
@@ -268,7 +269,7 @@ class ProjectController extends Controller
         $canDelete = true; 
         try {
             // Check if comment already exists
-            $dataExists = $this->projectRepository->getCommentsInfo($request->updatedProjectId,$request->indicator_id,$request->comments_for);
+            $dataExists = $this->projectRepository->getCommentsInfo($request->updatedProjectId,$request->indicator_id,$request->comments_for,$request->comment_id);
             if ($dataExists) {
                 //Update existing data...
                 $this->projectRepository->resetCommentsInfo($request,$dataExists);
@@ -297,6 +298,29 @@ class ProjectController extends Controller
             ], 500);
         }
             
+    }
+        /*
+    Save planning reveiw comments
+    */
+    public function saveSummary(ExecutiveSummaryRequest $request, $id)
+    {
+        try {
+            // Get project by ID (safely)
+            $this->projectRepository->saveSummary($request);
+    
+            // Return back with success message
+            return redirect()
+                ->back()
+                ->with('success', 'Executive Summary updated successfully.');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Executive Summary Update Error: '.$e->getMessage());
+    
+            // Return back with error message
+            return redirect()
+                ->back()
+                ->with('error', 'An error occurred while updating the Executive Summary.');
+        }
     }
      /*
         Update construction cost in Design and construction
@@ -352,16 +376,16 @@ class ProjectController extends Controller
                 //Update existing data...
                 $this->projectRepository->resetDesignAssessInfo($request,$dataExists);
                 //To show in Review Portion: Get Design info against each Project ID and each Indicator ID
-                $desingReviewPortion = $this->projectRepository->getDesignByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Design');
+                //$desingReviewPortion = $this->projectRepository->getDesignByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Design');
                 
                 return response()->json([
                     'status' => 'success',
                     'message' => $dataExists ? 'Info updated successfully!' : 'Info saved!',
                     'file_name' => $filename,
                     'file_url' => $file ? Storage::url($path) : null,
-                    'indicator_id' => $request->indicator_id,
+                    //'indicator_id' => $request->indicator_id,
                     'can_delete' => $canDelete, 
-                    'design_review_info' => $desingReviewPortion, 
+                    //'design_review_info' => $desingReviewPortion, 
                 ]);
             } 
             else {
@@ -369,16 +393,16 @@ class ProjectController extends Controller
                 $request->request->add(['filename' => $filename, 'path' => $path]);
                 $newData = $this->projectRepository->createDesingAssessmentItem($request);
                  //To show in Review Portion: Get Design info against each Project ID and each Indicator ID
-                 $desingReviewPortion = $this->projectRepository->getDesignByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Design');
+                 //$desingReviewPortion = $this->projectRepository->getDesignByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Design');
                 
                 return response()->json([
                     'status' => 'success',
                     'message' => $newData ? 'Info saved successfully!' : 'Info saved!',
                     'file_name' => $filename,
                     'file_url' => $file ? Storage::url($path) : null,
-                    'indicator_id' => $request->indicator_id,
+                    //'indicator_id' => $request->indicator_id,
                     'can_delete' => $canDelete,
-                    'design_review_info' => $desingReviewPortion, 
+                    //'design_review_info' => $desingReviewPortion, 
                 ]);
                 
             }
@@ -430,7 +454,7 @@ class ProjectController extends Controller
                 //Update existing data...
                 $this->projectRepository->resetConstructionAssessInfo($request,$dataExists);
                 //To show in Review Portion: Get Design info against each Project ID and each Indicator ID
-                $consReviewPortion = $this->projectRepository->getConstructionByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Construction');
+                //$consReviewPortion = $this->projectRepository->getConstructionByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Construction');
                 
                 return response()->json([
                     'status' => 'success',
@@ -439,7 +463,7 @@ class ProjectController extends Controller
                     'file_url' => $file ? Storage::url($path) : null,
                     'indicator_id' => $request->indicator_id,
                     'can_delete' => $canDelete, 
-                    'cons_review_info' => $consReviewPortion, 
+                    //'cons_review_info' => $consReviewPortion, 
                 ]);
             } 
             else {
@@ -447,7 +471,7 @@ class ProjectController extends Controller
                 $request->request->add(['filename' => $filename, 'path' => $path]);
                 $newData = $this->projectRepository->createConstructionAssessmentItem($request);
                  //To show in Review Portion: Get Construction info against each Project ID and each Indicator ID
-                 $consReviewPortion = $this->projectRepository->getConstructionByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Construction');
+                //$consReviewPortion = $this->projectRepository->getConstructionByProjectIndicator($request->updatedProjectId,$request->indicator_id,'Construction');
                 
                 return response()->json([
                     'status' => 'success',
@@ -456,7 +480,7 @@ class ProjectController extends Controller
                     'file_url' => $file ? Storage::url($path) : null,
                     'indicator_id' => $request->indicator_id,
                     'can_delete' => $canDelete,
-                    'cons_review_info' => $consReviewPortion, 
+                    //'cons_review_info' => $consReviewPortion, 
                 ]);
                 
             }
@@ -493,6 +517,18 @@ class ProjectController extends Controller
         $projectPhases = $this->projectRepository->getProjectPhases();
         $organizations = $this->projectRepository->getOrganizations();
         $buildingTypes = $this->projectRepository->getBuildingTypes();
+        $thresholds = $this->projectRepository->getthresholds();// Get Mandatory requirements
+
+        return view('projects.edit', compact('projectPhases', 'organizations', 'buildingTypes','project','thresholds'));   
+   
+    }
+    /*
+    public function edit($id)
+    {
+        $project = $this->projectRepository->getById($id);  
+        $projectPhases = $this->projectRepository->getProjectPhases();
+        $organizations = $this->projectRepository->getOrganizations();
+        $buildingTypes = $this->projectRepository->getBuildingTypes();
        
         $projectCheckLists = $this->projectRepository->getChecklistsByProjectId($id); 
         $totalChecklistCount = $projectCheckLists->count(); // This is required..
@@ -523,13 +559,124 @@ class ProjectController extends Controller
         'designAssessmentInfo','designFinalScoreRating','constructionAssessInfo','constructionFinalScoreRating','thresholds'));   
    
     }
+    */
+    public function checklist($id)
+    {
+        $project = $this->projectRepository->getById($id); 
+        $projectCheckLists = $this->projectRepository->getChecklistsByProjectId($id); 
+        $totalChecklistCount = $projectCheckLists->count(); // This is required..
+
+        return view('projects.checklist', compact('project','projectCheckLists','totalChecklistCount'));   
+   
+    }
+    public function planning($id)
+    {
+        $project = $this->projectRepository->getById($id); 
+        // Planning assessment page... where indicators are static in blade
+        $planningAssessment = $this->projectRepository->getPlanningAssessmentsByProject($id); 
+        //$totalChecklistCount = $planningAssessment->count(); // This is required.. 
+        return view('projects.planning', compact('project','planningAssessment'));   
+   
+    }
+    public function planningReview($id)
+    {
+        $project = $this->projectRepository->getById($id); 
+        
+         // To show in review portion page.. where indicators and all values are getting from DB with loop...
+         $planningScoresRatings = $this->projectRepository->getPlanningInfoByProjectId($id); 
+         //dd($planningScoresRatings);
+         // To show in review page.. for final scoring and ratings...
+         $planningFinalScoreRating = $this->projectRepository->getPhaseFinalScoreRating($id,'Planning');
+        return view('projects.planning-review', compact('project','planningScoresRatings','planningFinalScoreRating',));   
+   
+    }
+    public function design($id)
+    {
+        $project = $this->projectRepository->getById($id); 
+        // Get design indicators,compliances and assessments...
+        $designAssessmentInfo = $this->projectRepository->getDesignInfoByProjectId($id); 
+        return view('projects.design', compact('project','designAssessmentInfo'));   
+   
+    }
+    public function designReview($id)
+    {
+        $project = $this->projectRepository->getById($id); 
+        // To show in review page.. for final scoring and ratings...
+        $designAssessmentInfo = $this->projectRepository->getDesignInfoByProjectId($id); 
+        $designFinalScoreRating = $this->projectRepository->getPhaseFinalScoreRating($id,'Design');
+        return view('projects.design-review', compact('project','designAssessmentInfo','designFinalScoreRating'));   
+   
+    }
+    public function constructionReview($id)
+    {
+        $project = $this->projectRepository->getById($id); 
+        $constructionAssessInfo = $this->projectRepository->getConstructionInfoByProjectId($id); 
+        $constructionFinalScoreRating = $this->projectRepository->getPhaseFinalScoreRating($id,'Construction');
+        return view('projects.construction-review', compact('project','constructionAssessInfo','constructionFinalScoreRating'));   
+   
+    }
+    
+    public function construction($id)
+    {
+        $project = $this->projectRepository->getById($id); 
+        // Get construction indicators,compliances and assessments...
+        $constructionAssessInfo = $this->projectRepository->getConstructionInfoByProjectId($id); 
+        return view('projects.construction', compact('project','constructionAssessInfo'));   
+   
+    }
+    public function esummary($id)
+    {
+        $project = $this->projectRepository->getById($id); 
+
+        return view('projects.esummary', compact('project'));   
+   
+    }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProjectRequest $request, string $id)
     {
-      //dd("contr");
-        // return redirect()->to(route('projects.edit',$project->id))->with(['message' => 'Project has been added successfully.']);
+        try {
+            $this->projectRepository->update($id, $request);
+            session()->flash('success', 'Project updated successfully.');
+
+            $project = $this->projectRepository->getById($id);  
+            $projectPhases = $this->projectRepository->getProjectPhases();
+            $organizations = $this->projectRepository->getOrganizations();
+            $buildingTypes = $this->projectRepository->getBuildingTypes();
+        
+            $projectCheckLists = $this->projectRepository->getChecklistsByProjectId($id); 
+            $totalChecklistCount = $projectCheckLists->count(); // This is required..
+
+            // Planning assessment page... where indicators are static in blade
+            $planningAssessment = $this->projectRepository->getPlanningAssessmentsByProject($id); 
+            //$totalChecklistCount = $planningAssessment->count(); // This is required..
+            
+            // To show in review portion page.. where indicators and all values are getting from DB with loop...
+            $planningScoresRatings = $this->projectRepository->getPlanningInfoByProjectId($id); 
+            // To show in review page.. for final scoring and ratings...
+            $planningFinalScoreRating = $this->projectRepository->getPhaseFinalScoreRating($id,'Planning');
+
+            // Get design indicators,compliances and assessments...
+            $designAssessmentInfo = $this->projectRepository->getDesignInfoByProjectId($id); 
+            // To show in review page.. for final scoring and ratings...
+            $designFinalScoreRating = $this->projectRepository->getPhaseFinalScoreRating($id,'Design');
+
+            // Get construction indicators,compliances and assessments...
+            $constructionAssessInfo = $this->projectRepository->getConstructionInfoByProjectId($id); 
+            // To show in review page.. for final scoring and ratings...
+            $constructionFinalScoreRating = $this->projectRepository->getPhaseFinalScoreRating($id,'Construction');
+
+            $thresholds = $this->projectRepository->getthresholds();// Get Mandatory requirements
+
+            return view('projects.edit', compact('projectPhases', 'organizations', 'buildingTypes',
+            'totalChecklistCount','project','projectCheckLists','planningAssessment','planningScoresRatings','planningFinalScoreRating',
+            'designAssessmentInfo','designFinalScoreRating','constructionAssessInfo','constructionFinalScoreRating','thresholds'));   
+
+        } catch (\Exception $e) {
+            Log::error('Project update error: ' . $e->getMessage());
+            session()->flash('error', 'An error occurred while updating the project.');
+        }     
     }
 
     /**

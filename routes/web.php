@@ -43,6 +43,17 @@ Route::middleware('auth')->group(function () {
     Route::post('projects/savecomments', [ProjectController::class, 'saveComments'])->name('projects.saveComments'); 
     Route::post('projects/updatecost', [ProjectController::class, 'updateCost'])->name('projects.updateCost'); 
     Route::post('projects/store', [ProjectController::class, 'store'])->name('projects.store'); 
+    Route::get('projects/{project}/esummary', [ProjectController::class, 'esummary'])->name('projects.esummary');
+    Route::put('projects/{id}/save-summary', [ProjectController::class, 'saveSummary'])->name('projects.savesummary');
+
+    Route::get('projects/{project}/checklist', [ProjectController::class, 'checklist'])->name('projects.checklist');
+    Route::get('projects/{project}/planning', [ProjectController::class, 'planning'])->name('projects.planning');
+    Route::get('projects/{project}/planning-review', [ProjectController::class, 'planningReview'])->name('projects.planningreview');
+    Route::get('projects/{project}/design', [ProjectController::class, 'design'])->name('projects.design');
+    Route::get('projects/{project}/design-review', [ProjectController::class, 'designReview'])->name('projects.designreview');
+    Route::get('projects/{project}/construction', [ProjectController::class, 'construction'])->name('projects.construction');
+    Route::get('projects/{project}/construction-review', [ProjectController::class, 'constructionReview'])->name('projects.consreview');
+
 
 
    //Route::post('updatechecklist', [ProjectController::class, 'updateCheckList'])->name('projects.updateCheckList');  

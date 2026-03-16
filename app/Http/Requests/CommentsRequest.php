@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CommentsRequest extends FormRequest
 {
@@ -12,6 +14,14 @@ class CommentsRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'status' => 'error',
+            'message' => 'Validation failed.',
+            'errors' => $validator->errors()
+        ], 422));
     }
 
     /**
@@ -36,7 +46,7 @@ class CommentsRequest extends FormRequest
         
         // Custom messages
         return [
-            'comments.required' => 'Please enter comment.',
+            'comments.required' => 'Please enter the comment!',
             'indicator_id.required' => 'Please check indicator id is missing',
             'updatedProjectId.required' => 'Please check project id is missing',
         ];
