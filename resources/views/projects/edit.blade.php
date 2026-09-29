@@ -9,7 +9,7 @@
                 <!-- Question 1 -->
                 <tr>
                     <th width="25%" class="text-start align-middle">
-                        Has this project been reviewed by CSA before? <i style="color: red;"><b>( * )</b></i>
+                        Has this project been reviewed by CSA before? <span class="required-star">*</span>
                     </th>
                     <th width="25%" class="text-start align-middle">
                         <select name="reviewed_before" id="reviewed_before" class="form-select" required>
@@ -24,7 +24,7 @@
                 <!-- Question 2 -->
                 <tr id="phase_row" style="display: none;">
                     <th width="25%" class="text-start align-middle">
-                        If YES, which phase? <i style="color: red;"><b>( * )</b></i>
+                        If YES, which phase? <span class="required-star">*</span>
                     </th>
                     <th width="25%" class="text-start align-middle">
                         <select name="reviewed_phase" id="reviewed_phase" class="form-select">
@@ -40,7 +40,7 @@
                 <!-- Question 3 -->
                 <tr>
                     <th width="25%" class="text-start align-middle">
-                        Is this project now being assessed for next phase? <i style="color: red;"><b>( * )</b></i>
+                        Is this project now being assessed for next phase? <span class="required-star">*</span>
                     </th>
                     <th width="25%" class="text-start align-middle">
                         <select name="next_phase" id="next_phase" class="form-select" required>
@@ -92,12 +92,6 @@
                                     <div class="invalid-feedback">Please select a phase</div>
                                 </div>
 
-                                {{-- Assessment Requirement --}}
-                                <div class="col-xxl-3 col-md-6">
-                                    <label class="form-label">Assessment Requirement</label>
-                                    <input type="text" name="assessment_req" value="{{ old('assessment_req', $project->assessment_req) }}" class="form-control">
-                                </div>
-
                                 {{-- Organization --}}
                                 <div class="col-xxl-3 col-md-6">
                                     <label class="form-label">Organization</label>
@@ -118,7 +112,13 @@
                                     <input type="date" name="date_gpa" value="{{ old('date_gpa', $project->date_gpa) }}" class="form-control" required>
                                     <div class="invalid-feedback">Please select Date of GBA</div>
                                 </div>
-
+                            </div>
+                        </div>
+                    </div>
+                                
+                    <div class="card-body">
+                        <div class="live-preview">
+                            <div class="row gy-4">
                                 {{-- Start Date --}}
                                 <div class="col-xxl-3 col-md-6">
                                     <label class="form-label">Project Start Date</label>
@@ -136,44 +136,65 @@
                                 {{-- Country --}}
                                 <div class="col-xxl-3 col-md-6">
                                     <label class="form-label">Country</label>
-                                    <select name="country_code" class="form-select">
-                                        <option selected>Alabama</option>
-                                        <option>Alaska</option>
-                                        <option>California</option>
-                                        <option>Delaware</option>
-                                        <option>Tennessee</option>
-                                        <option>Texas</option>
-                                        <option>Washington</option>
+                                    <select name="country_code" id="country_code" class="form-select" onchange="ajaxFormGet('create_project','{{ route('projects.getRegions') }}','region_code')" required>
+                                        <option value="">-Select Country-</option>
+                                        @foreach($countries as $id => $country_name)
+                                            <option value="{{ $id }}" {{ old('country_code', $project->country_code) == $id ? 'selected' : '' }}>
+                                                {{ $country_name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
 
                                 {{-- Region --}}
                                 <div class="col-xxl-3 col-md-6">
                                     <label class="form-label">Region</label>
-                                    <select name="region_code" class="form-select">
-                                        <option selected>Alabama</option>
-                                        <option>Alaska</option>
-                                        <option>California</option>
-                                        <option>Delaware</option>
-                                        <option>Tennessee</option>
-                                        <option>Texas</option>
-                                        <option>Washington</option>
+                                    <select name="region_code" id="region_code" class="form-select">
+                                        <option value="">-Select Region-</option>
+                                    
+                                        @foreach($regions as $id => $region_name)
+                                            <option value="{{ $id }}"
+                                                {{ old('region_code', $project->region_code) == $id ? 'selected' : '' }}>
+                                                {{ $region_name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
-
-                                {{-- Location --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="live-preview">
+                            <div class="row gy-4">
                                 <div class="col-xxl-3 col-md-6">
                                     <label class="form-label">Location (Site / HO)</label>
                                     <input type="text" name="location" value="{{ old('location', $project->location) }}" class="form-control">
                                 </div>
 
-                                {{-- Coordinates --}}
                                 <div class="col-xxl-3 col-md-6">
-                                    <label class="form-label">GPS Coordinates</label>
-                                    <input type="text" name="coordinates" value="{{ old('coordinates', $project->coordinates) }}" class="form-control">
-                                    <div class="invalid-feedback">Please enter coordinates in decimal</div>
+                                    <div>
+                                        <label for="coordiates" class="form-label">Coordinates (latitude)</label>
+                                        <input type="text" name="latitude" id="latitude" value="{{ old('latitude', $project->latitude) }}" class="form-control" placeholder="exp: 33.5651"> 
+                                        <div class="invalid-feedback">Please latitude in decimal</div>   
+                                    </div>
                                 </div>
+                                <!--end col-->
+                                <div class="col-xxl-3 col-md-6">
+                                    <div>
+                                        <label for="coordiates" class="form-label">Coordinates (longitude)</label>
+                                        <input type="text" name="longitude" id="longitude" value="{{ old('longitude', $project->longitude) }}" class="form-control" placeholder="exp: 73.0169"> 
+                                        <div class="invalid-feedback">Please longitude in decimal</div>   
+                                    </div>
+                                </div>
+                                <!--end col-->
 
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="live-preview">
+                            <div class="row gy-4">
                                 {{-- Building Type --}}
                                 <div class="col-xxl-3 col-md-6">
                                     <label class="form-label">Building Type</label>
@@ -187,12 +208,18 @@
                                     </select>
                                     <div class="invalid-feedback">Please select building type</div>
                                 </div>
-
                                 {{-- Sub-Type --}}
                                 <div class="col-xxl-3 col-md-6">
                                     <label class="form-label">Sub-Type</label>
-                                    <select name="sub_type_id" id="sub_type_id" class="form-select" required>
-                                        <option value="">Select Sub-type</option>
+                                    <select name="sub_type_id" id="sub_type_id" class="form-select">
+                                        <option value="">-Select Sub-type-</option>
+                                    
+                                        @foreach($buildingSubTypes as $id => $sub_type_name)
+                                            <option value="{{ $id }}"
+                                                {{ old('sub_type_id', $project->sub_type_id) == $id ? 'selected' : '' }}>
+                                                {{ $sub_type_name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-feedback">Please select sub type</div>
                                 </div>

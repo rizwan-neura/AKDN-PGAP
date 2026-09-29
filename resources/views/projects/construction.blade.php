@@ -19,7 +19,7 @@
                                     <tr >
                                         <th style="width: 5%; word-wrap: break-word; white-space: normal;"></th>
                                         <th  class="text-end align-middle">Is the construction cost (USD) changed at construction phase:
-                                            <i style="color: red;"><b>( * )</b></i>
+                                            <span class="required-star">*</span>
                                         
                                         <th width="10%"><input type="text" name="cost_at_construction" id="cost_at_construction" class="form-control" value="{{ old('cost_at_construction', $project->cost_at_construction) }}">
                                         </th>

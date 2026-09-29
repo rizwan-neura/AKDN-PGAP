@@ -61,7 +61,7 @@
                                 <!-- Dynamic Score Rows -->
                                 @foreach ($designAssessmentInfo as $row)
                                     
-                                        <table class="table table-bordered align-middle">
+                                <table class="table table-bordered table-sm align-middle">
                                             <tr data-indexPlanningIndcaotrId="{{ $row->id }}">
                                                 <td class="col-md-1  text-center">
                                                     {{ $row->ref_no }}
@@ -69,14 +69,23 @@
                                                 <td class="col-md-3 text-start">
                                                     {{ $row->indicator_name }}
                                                     @if($row->is_mandatory === 1)
-                                                        <i class="material-icons col-red"><b>(*)</b></i>
+                                                    <span class="required-star">*</span>
                                                     @endif
                                                 </td>
                                                 <td class="col-md-1 text-center td-comp-name" data-indicator-id="{{ $row->id }}">
-                                                    {{ $row->comp_name }}
+                                                    @if($row->id != 4)
+                                                        {{ $row->comp_name }}
+                                                     @else
+                                                        {{ $row->compliance_31_value }}
+                                                    @endif
                                                 </td>
                                                 <td class="col-md-1 text-center td-comp-score" data-indicator-id="{{ $row->id }}">
-                                                    {{ $row->complianceScore }}
+                                                    @if($row->id != 4)
+                                                         {{ $row->complianceScore }}
+                                                     @else
+                                                            {{ $row->score * 10 }}
+                                                    @endif
+                                                   
                                                 </td>
                                                 <td class="col-md-1 text-center td-weightage" data-indicator-id="{{ $row->id }}">
                                                     {{ number_format($row->indicatorWeightage, 0) }}%
@@ -84,7 +93,7 @@
                                                 
                                                 <td class="col-md-3 text-start td-weightage" data-indicator-id="{{ $row->id }}">
                                             
-                                                    <div data-bs-spy="scroll" data-bs-target="#navbar-example" class="scrollspy-example p-2" data-bs-offset="8">
+                                                    <div class="comments-container">
                                                         <div class="text-muted">
                                                             @if($row->comments->isEmpty())
                                                                 <em>No comments yet.</em>
@@ -98,8 +107,16 @@
                                                                             <strong>{{ $comment->user->first_name ?? 'Unknown User' }}</strong>
                                                                             <br>
                                                                             <span class="small text-muted">{{ $comment->created_at->diffForHumans() }}</span>
-                                                                            <p class="mb-0">{{ $comment->comments }}
-                                                                                <button type="button"  class="btn btn-link btn-sm"data-bs-toggle="modal" data-bs-target="#varyingcontentModal_{{ $comment->id }}" data-bs-whatever="Comment">[EDIT]</button>
+                                                                            <p class="mb-0">
+                                                                                {{ $comment->comments }}
+                                                                            
+                                                                                <button type="button"
+                                                                                        class="btn btn-link p-0 ms-2 edit-comment"
+                                                                                        data-bs-toggle="modal"
+                                                                                        data-bs-target="#varyingcontentModal_{{ $comment->id }}"
+                                                                                        data-bs-whatever="Comment">
+                                                                                    Edit
+                                                                                </button>
                                                                             </p>
                                                                         </div>
                                                                         
@@ -113,18 +130,29 @@
                                                                                     </div>
                                                                                     <div class="status-message text-success mt-2" style="margin-left: 20px;"></div>
                                                                                     <div class="modal-body">
-                                                                                        <form>
+                                                                                        <form id="comment_form_{{ $comment->id }}">
                                                                                             <div class="mb-3">
                                                                                                 <textarea class="form-control" name="comments" id="comments_{{ $comment->id }}" rows="4">{{ $comment->comments }}</textarea>
                                                                                             </div>
                                                                                         </form>
                                                                                     </div>
                                                                                     <div class="modal-footer">
-                                                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="location.reload();">Close</button>
-                                                                                        <button class="btn btn-success" type="button"
-                                                                                            onclick="saveComments('comment_form_{{ $comment->id }}', '{{ route('projects.saveComments') }}', {{ $comment->id }} ); return false;">
-                                                                                            SAVE
+                                                                                        <button type="button"
+                                                                                                class="btn btn-light"
+                                                                                                data-bs-dismiss="modal">
+                                                                                            Close
                                                                                         </button>
+                                                                                        <button class="btn btn-success"
+                                                                                                    type="button"
+                                                                                                    onclick="saveComments(
+                                                                                                        'comment_form_{{ $comment->id }}',
+                                                                                                        '{{ route('projects.saveComments') }}',
+                                                                                                        {{ $comment->id }},
+                                                                                                        'update'
+                                                                                                    ); return false;">
+                                                                                                SAVE
+                                                                                        </button>
+                                                                                       
                                                                                         <!-- Start: Below variables must be inside model -->
                                                                                         <input type="hidden" value="Design" name="comments_for">
                                                                                         <input type="hidden" value="{{ $row->id }}" name="indicator_id">
@@ -149,48 +177,93 @@
                                                 </td>
                                                 
                                                 <td class="col-md-1 text-start">
-                                                    <form id="create_comment_form_{{ $row->id }}" method="POST" class="mb-0">
-                                                        @csrf
+                                                    
                                                         <div class="hstack gap-2 flex-wrap">
                                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#createCommentModal_{{ $row->id }}" data-bs-whatever="Comment">Commnet</button>
                                                         </div>
                                                        
                                                         <!-- Create commnet modal content -->
-                                                        <div class="modal fade" id="createCommentModal_{{ $row->id }}" tabindex="-1" aria-labelledby="varyingcontentModalLabel_{{ $row->id }}" aria-hidden="true">
+                                                        <div class="modal fade"
+                                                            id="createCommentModal_{{ $row->id }}"
+                                                            tabindex="-1"
+                                                            aria-labelledby="varyingcontentModalLabel_{{ $row->id }}"
+                                                            aria-hidden="true">
+
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
+
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="varyingcontentModalLabel_{{ $row->id }}">Comment</h5>
-                                                                        
+                                                                        <h5 class="modal-title"
+                                                                            id="varyingcontentModalLabel_{{ $row->id }}">
+                                                                            Comment
+                                                                        </h5>
                                                                     </div>
-                                                                    <div class="status-message text-success mt-2" style="margin-left: 20px;"></div>
+
+                                                                    <div class="status-message text-success mt-2"
+                                                                        style="margin-left: 20px;">
+                                                                    </div>
+
                                                                     <div class="modal-body">
-                                                                        <form>
+
+                                                                        <form id="create_comment_form_{{ $row->id }}"
+                                                                            method="POST">
+
+                                                                            @csrf
+
                                                                             <div class="mb-3">
-                                                                                <textarea class="form-control" name="comments" id="comments_{{ $row->id }}" rows="4"></textarea>
+                                                                                <textarea
+                                                                                    class="form-control"
+                                                                                    name="comments"
+                                                                                    id="comments_{{ $row->id }}"
+                                                                                    rows="4"></textarea>
                                                                             </div>
+
+                                                                            <!-- Hidden variables -->
+                                                                            <input type="hidden"
+                                                                                value="Design"
+                                                                                name="comments_for">
+
+                                                                            <input type="hidden"
+                                                                                value="{{ $row->id }}"
+                                                                                name="indicator_id">
+
+                                                                            <input type="hidden"
+                                                                                value="{{ $project->id }}"
+                                                                                name="updatedProjectId">
+
+                                                                            <input type="hidden"
+                                                                                value="{{ auth()->id() }}"
+                                                                                name="user_id">
+
                                                                         </form>
+
                                                                     </div>
+
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" onclick="location.reload();">Close</button>
-                                                                        <button class="btn btn-success" type="button"
-                                                                            onclick="saveComments('create_comment_form_{{ $row->id }}', '{{ route('projects.saveComments') }}', {{ $row->id }} ); return false;">
+
+                                                                        <button type="button"
+                                                                                class="btn btn-light"
+                                                                                data-bs-dismiss="modal">
+                                                                            Close
+                                                                        </button>
+
+                                                                        <button class="btn btn-success"
+                                                                                type="button"
+                                                                                onclick="saveComments(
+                                                                                    'create_comment_form_{{ $row->id }}',
+                                                                                    '{{ route('projects.saveComments') }}',
+                                                                                    {{ $row->id }},
+                                                                                    'create'
+                                                                                ); return false;">
                                                                             SAVE
                                                                         </button>
-                                                                        <!-- Start: Below variables must be inside model -->
-                                                                        <input type="hidden" value="Design" name="comments_for">
-                                                                        <input type="hidden" value="{{ $row->id }}" name="indicator_id">
-                                                                        <input type="hidden" value="{{ $project->id }}" name="updatedProjectId">
-                                                                        <input type="hidden" value="{{ auth()->id() }}" name="user_id">
-                                                                        
-                                                                        <!-- End: variables must be inside model -->
+
                                                                     </div>
+
                                                                 </div>
                                                             </div>
-                                                            
                                                         </div>
                                                         <!-- end create comment modal content -->
-                                                    </form>
                                                     
                                                 </td>
                                                 

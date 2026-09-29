@@ -38,7 +38,7 @@
                                         <div class="flex-grow-1 px-2" style="width: 55%; word-wrap: break-word; white-space: normal;" title="{{ $row->checklist_name }}">
                                             {{ $row->checklist_name }}
                                             @if($row->is_mandatory === 1)
-                                                <i style="color: red;"><b>( * )</b></i>
+                                            <span class="required-star">*</span>
                                             @endif
                                         </div>
                                     

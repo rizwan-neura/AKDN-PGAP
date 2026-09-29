@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('checklists', ChecklistController::class);
     Route::get('getsubtypes', [ProjectController::class, 'getBuildingSubTypes'])->name('projects.getBuildingSubTypes');  
+    Route::get('getregions', [ProjectController::class, 'getRegions'])->name('projects.getRegions'); 
    
     Route::post('projects/savechecklist', [ProjectController::class, 'saveCheckList'])->name('projects.saveCheckList');  
     Route::post('projects/delete-checklist-file', [ProjectController::class, 'deleteChecklistFile'])->name('projects.deleteCheckListFile');

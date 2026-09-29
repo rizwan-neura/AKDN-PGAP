@@ -44,7 +44,7 @@
                                                                 <!-- Checklist Name -->
                                                                 <div class="flex-grow-1 px-2" style="width: 55%; word-wrap: break-word; white-space: normal;" >
                                                                     Is a feasibility study conducted by the project team to assess, "Should we build" approach concluded? And has this been submitted, along with the justification to the CSA for review and sign off?
-                                                                    <i style="color: red;"><b>( * )</b></i>
+                                                                    <span class="required-star">*</span>
                                                                     
                                                                 </div>
                                                             
@@ -223,7 +223,7 @@
                                                                 <!-- Checklist Name -->
                                                                 <div class="flex-grow-1 px-2" style="width: 55%; word-wrap: break-word; white-space: normal;" >
                                                                     Is the site selected meeting the full scope of technical due diligences?
-                                                                    <i style="color: red;"><b>( * )</b></i>
+                                                                    <span class="required-star">*</span>
                                                                 </div>
                                                             
                                                                 <!-- Status Select -->
@@ -346,7 +346,7 @@
                                                                 <!-- Checklist Name -->
                                                                 <div class="flex-grow-1 px-2" style="width: 55%; word-wrap: break-word; white-space: normal;" >
                                                                     Does design brief include the AKDN Green Building Section?
-                                                                    <i style="color: red;"><b>( * )</b></i>
+                                                                    <span class="required-star">*</span>
                                                                 </div>
                                                             
                                                                 <!-- Status Select -->

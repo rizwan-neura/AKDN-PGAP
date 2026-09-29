@@ -33,11 +33,14 @@ class DesignAssessRequest extends FormRequest
     public function rules(): array
     {
         
-        $rules = [
-            'compliance' => 'required',
-            'indicator_id' => 'required',
-            'updatedProjectId' => 'required',
-        ];
+        if($this->indicator_id != "4"){
+            $rules = [
+                'compliance' => 'required',
+                'indicator_id' => 'required',
+                'updatedProjectId' => 'required',
+                
+            ];
+        }
         //2, 3, 5, 6, 7, 9, 10, 11, 14, 15, 16
          // if compliance is YES against these indicators and file is not uploaded, show error
          if ($this->compliance === '2' && ($this->indicator_id === "2" || $this->indicator_id === "3" || $this->indicator_id === "5" || $this->indicator_id === "6" 
@@ -46,6 +49,14 @@ class DesignAssessRequest extends FormRequest
             $rules['design_uploads'] = 'required|file|mimes:pdf|max:2048';
         }else {
             $rules['design_uploads'] = 'nullable|file|mimes:pdf|max:2048';
+        }
+        if($this->indicator_id === "4"){
+            $rules = [
+                'compliance_31_value' => 'required|numeric|min:0|max:1',
+                'indicator_id' => 'required',
+                'updatedProjectId' => 'required',
+                
+            ]; 
         }
 
         return $rules;
@@ -69,6 +80,8 @@ class DesignAssessRequest extends FormRequest
             'compliance.required' => 'Please select compliance.',
             'design_uploads.required' => 'File upload is required when status is YES.',
             'design_uploads.mimes' => 'Only PDF files are allowed.',
+            'compliance_31_value.required' => 'Please enter compliance value.',
+            'compliance_31_value.min' => 'Compliance must be greater than 0 or less than 1',
         ];
     }
 }

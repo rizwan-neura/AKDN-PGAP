@@ -40,13 +40,16 @@ class ProjectRepository
         $project = new Project();
         $project->project_name = $request->project_name;
         $project->phase_id = $request->phase_id;
-        $project->assessment_req = $request->assessment_req;
+        //$project->assessment_req = $request->assessment_req;
         $project->organization_id = $request->organization_id;
         $project->date_gpa = Carbon::parse($request->date_gpa)->format('Y-m-d');
         $project->start_date = Carbon::parse($request->start_date)->format('Y-m-d');
         $project->end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+        $project->country_code = $request->country_code;
+        $project->region_code = $request->region_code;
         $project->location = $request->location;
-        $project->coordinates = $request->coordinates;
+        $project->latitude = $request->latitude;
+        $project->longitude = $request->longitude;
         $project->type_id = $request->type_id;
         $project->sub_type_id = $request->sub_type_id;
         $project->construction_cost = $request->construction_cost;
@@ -65,13 +68,16 @@ class ProjectRepository
         $project = $this->getById($id);
         $project->project_name = $request->project_name;
         $project->phase_id = $request->phase_id;
-        $project->assessment_req = $request->assessment_req;
+        //$project->assessment_req = $request->assessment_req;
         $project->organization_id = $request->organization_id;
         $project->date_gpa = Carbon::parse($request->date_gpa)->format('Y-m-d');
         $project->start_date = Carbon::parse($request->start_date)->format('Y-m-d');
         $project->end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+        $project->country_code = $request->country_code;
+        $project->region_code = $request->region_code;
         $project->location = $request->location;
-        $project->coordinates = $request->coordinates;
+        $project->latitude = $request->latitude;
+        $project->longitude = $request->longitude;
         $project->type_id = $request->type_id;
         $project->sub_type_id = $request->sub_type_id;
         $project->construction_cost = $request->construction_cost;
@@ -94,6 +100,14 @@ class ProjectRepository
 
         return $country;
     }
+    public function getCountries()
+    {
+        $countries = DB::table('countries')
+            ->orderBy('country_name', 'ASC')
+            ->pluck('country_name', 'country_code');
+    
+        return $countries;
+    }
     public function getProjectPhases()
     {   
         $projectPhases = DB::table('project_phases')->pluck('phase_name', 'id');
@@ -113,6 +127,11 @@ class ProjectRepository
     {   
         $buildingSubTypes = DB::table('building_sub_types')->where('building_type_id', $type_id)->pluck('sub_type_name', 'id');
         return $buildingSubTypes;
+    }
+    public function getRegions($countryCode)
+    {   
+        $regions = DB::table('regions')->where('country_code', $countryCode)->pluck('region_name', 'region_code');
+        return $regions;
     }
     public function getProjectChecklistInfo($project_id,$checklist_id){
         return ProjectChecklist::where('project_id', $project_id)
@@ -309,9 +328,52 @@ class ProjectRepository
 
         }
     }
+    // This function is only for one of Desing phase indicator (3.1), user enters manual value.
+    private function get_3_1_Value($value)
+    {
+        if (!is_numeric($value)) {
+            return '';
+        }
+
+        if ($value >= 1) {
+            return 0;
+        } elseif ($value >= 0.9) {
+            return 2;
+        } elseif ($value >= 0.8) {
+            return 4;
+        } elseif ($value >= 0.7) {
+            return 5;
+        } elseif ($value >= 0.6) {
+            return 6;
+        } elseif ($value >= 0.5) {
+            return 7;
+        } elseif ($value >= 0.4) {
+            return 8;
+        } elseif ($value >= 0.3) {
+            return 9;
+        } elseif ($value >= 0) {
+            return 10;
+        }
+
+        return '';
+    }
+    
     public function resetDesignAssessInfo($request,$dataExists)
     {
-        $assessScore = $this->calculateDesignIndicatorScore($request->indicator_id,$request->compliance);
+        
+        if($request->indicator_id==4){
+            $dataExists->compliances_id = 0;
+            $value_3_1 = $this->get_3_1_Value($request->compliance_31_value);
+            $pIndcatorWeight = $this->getDesignIndicatorWeightage($request->indicator_id);
+            $assessScore = $pIndcatorWeight * $value_3_1;
+            $dataExists->compliance_31_value = $request->compliance_31_value;
+            $dataExists->score = $assessScore;
+        }else{
+            $assessScore = $this->calculateDesignIndicatorScore($request->indicator_id,$request->compliance);
+            $dataExists->compliances_id = $request->compliance;
+            $dataExists->score = $assessScore;
+        }
+        
         // Delete old file if uploading new one
         if ($request->file('design_uploads') && !is_null($dataExists->file_path) && Storage::disk('public')->exists($dataExists->file_path)) {
             Storage::disk('public')->delete($dataExists->file_path);
@@ -321,8 +383,7 @@ class ProjectRepository
             $dataExists->file_name = $request->filename;
             $dataExists->file_path = $request->path;
         }
-        $dataExists->compliances_id = $request->compliance;
-        $dataExists->score = $assessScore;
+        
         $dataExists->updated_by = auth()->user()->id;
         $dataExists->save();
 
@@ -501,11 +562,24 @@ class ProjectRepository
     {
         //dd($request->country_name);
         $newChecklist = new DesignAssess();
-        $assessScore = $this->calculateDesignIndicatorScore($request->indicator_id,$request->compliance);
+
+        if($request->indicator_id==4){
+            $newChecklist->compliances_id = 0;
+            $value_3_1 = $this->get_3_1_Value($request->compliance_31_value);
+            $pIndcatorWeight = $this->getDesignIndicatorWeightage($request->indicator_id);
+            $assessScore = $pIndcatorWeight * $value_3_1;
+            $newChecklist->compliance_31_value = $request->compliance_31_value;
+            $newChecklist->score = $assessScore;
+        }else{
+            $assessScore = $this->calculateDesignIndicatorScore($request->indicator_id,$request->compliance);
+            $newChecklist->compliances_id = $request->compliance;
+            $newChecklist->score = $assessScore;
+        }
+        //$assessScore = $this->calculateDesignIndicatorScore($request->indicator_id,$request->compliance);
         $newChecklist->project_id = $request->updatedProjectId;
         $newChecklist->indicator_id = $request->indicator_id;
-        $newChecklist->compliances_id = $request->compliance;
-        $newChecklist->score = $assessScore;
+        //$newChecklist->compliances_id = $request->compliance;
+        //$newChecklist->score = $assessScore;
         $newChecklist->created_by = auth()->user()->id;
 
         if ($request->file('design_uploads')) {
@@ -690,6 +764,7 @@ class ProjectRepository
                 'is_mandatory' => $indicator->is_mandatory,
                 'indicatorWeightage' => $indicator->weightage * 100,
                 'score' => $assessment?->score,
+                'compliance_31_value' => $assessment?->compliance_31_value,
                 'compliances_id' => $assessment?->compliances_id,
                 'file_path' => $assessment?->file_path,
                 'comp_name' => $compliance?->comp_name,

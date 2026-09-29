@@ -46,6 +46,7 @@ class ProjectRequest extends FormRequest
             }
             return $rules; // Return early, no other rules needed
         }
+       
 
         // Otherwise (normal project creation or full update)
         if ($this->isMethod('post')) {
@@ -62,9 +63,22 @@ class ProjectRequest extends FormRequest
                 'date_gpa' => ['required'],
                 'start_date' => ['required'],
                 'end_date' => ['required'],
+                'country_code' => ['required'],
                 'type_id' => ['required'],
                 'construction_cost' => ['required', 'numeric', 'min:0'],
-                'coordinates' => ['decimal:6,6']
+                
+                'latitude' => [
+                    'nullable',
+                    'required_with:longitude',
+                    'numeric',
+                    'between:-90,90',
+                ],
+                'longitude' => [
+                    'nullable',
+                    'required_with:latitude',
+                    'numeric',
+                    'between:-180,180',
+                ],
             ];
         }
 
@@ -73,14 +87,15 @@ class ProjectRequest extends FormRequest
     public function messages()
     {
         return [
-            'phase_id.required' => 'Please select Current Phase.',
-            'organization_id.required' => 'Please select Organization.',
-            'date_gpa.required' => 'Please enter Date of GBA* Performance.',
-            'start_date.required' => 'Please enter Start Date.',
-            'end_date.required' => 'Please enter End Date.',
-            'type_id.required' => 'Please select Building Type.',
-            'construction_cost.required' => 'Please enter Construction Cost (USD).',
-            'coordinates.required' => 'Please coordinates in decimal.',
+            'phase_id.required' => 'Please select current phase.',
+            'organization_id.required' => 'Please select organization.',
+            'date_gpa.required' => 'Please enter date of GBA* performance.',
+            'start_date.required' => 'Please enter start date.',
+            'end_date.required' => 'Please enter end date.',
+            'country_code.required' => 'Please select country.',
+            'type_id.required' => 'Please select building type.',
+            'construction_cost.required' => 'Please enter construction cost (USD).',
+            'coordinates.required' => 'Please coordinates in decimal...',
 
             'cost_at_design.required' => 'Please enter cost at design phase.',
             'cost_at_construction.required' => 'Please enter cost at construction phase.',

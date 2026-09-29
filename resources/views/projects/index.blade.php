@@ -20,8 +20,7 @@
                     <div class="row g-4 mb-3">
                         <div class="col-sm-auto">
                             <div>
-                                <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal"><i class="ri-add-line align-bottom me-1"></i>Create Project</button>
-                                <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                                <a href="{{ route('projects.create') }}" class="btn btn-success add-btn"><i class="ri-add-line align-bottom me-1" ></i>Create Project</a>
                             </div>
                         </div>
                         <div class="col-sm">
@@ -61,7 +60,7 @@
                                             <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
                                         </div>
                                     </th>
-                                    <td class="id" ><a href="javascript:void(0);" class="fw-medium link-primary">{{ $row->project_name }}</a></td>
+                                    <td class="id" ><a href="{{ route('projects.edit', $row->id) }}" class="fw-medium link-primary">{{ $row->project_name }}</a></td>
                                     <td class="status">
                                         {{ $row->current_phase->phase_name }}
                                     </td>

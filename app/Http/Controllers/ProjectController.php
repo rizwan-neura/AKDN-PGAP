@@ -16,7 +16,6 @@ use App\Http\Requests\ConstructionAssessRequest;
 use App\Http\Requests\CommentsRequest;
 use App\Http\Requests\ExecutiveSummaryRequest;
 
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -54,8 +53,9 @@ class ProjectController extends Controller
         $projectPhases = $this->projectRepository->getProjectPhases();
         $organizations = $this->projectRepository->getOrganizations();
         $buildingTypes = $this->projectRepository->getBuildingTypes();
+        $countries = $this->projectRepository->getCountries();
         $thresholds = $this->projectRepository->getthresholds();// Get Mandatory requirements
-        return view('projects.create', compact('projectPhases', 'organizations', 'buildingTypes','thresholds'));   
+        return view('projects.create', compact('projectPhases', 'organizations', 'buildingTypes','thresholds','countries'));   
     }
     /**
      * Store a newly created resource in storage.
@@ -81,7 +81,7 @@ class ProjectController extends Controller
             Log::error('Save info failed: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'An error occurred during file upload.',
+                'message' => 'An error occurred during data upload.',
             ], 500);
         }
             
@@ -108,7 +108,23 @@ class ProjectController extends Controller
     /**
      * Save project checklists information.
      */
-    
+    public function getRegions(Request $request)
+    {
+        //return response()->json(['data' => $request->country_code]);
+        $regions = $this->projectRepository->getRegions($request->country_code);
+        $data = view('projects.regions', compact('regions'))->render();
+       //dd($data);
+        $statusCode = 201;
+            //$response = parse_json_api_response($data, $statusCode);
+            $response = [
+                'message' => 'Data found',
+                'success' => true,
+                'data' => $data,
+                'status' => $statusCode
+            ];
+            return response()->json($response, $statusCode);
+    }
+   
    public function saveCheckList(ProjectChecklistRequest $request)
     {
         $canDelete = true; 
@@ -347,7 +363,7 @@ class ProjectController extends Controller
     public function saveDesignAssessment(DesignAssessRequest $request)
     {
         $canDelete = true; 
-        //return response()->json(['data' => $request->updatedProjectId]);
+        //return response()->json([ 'updatedId' => $request->ref_3_1 ]);
         
         try {
             //Safe file access
@@ -513,14 +529,28 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        $project = $this->projectRepository->getById($id);  
+        $project = $this->projectRepository->getById($id);
+        
         $projectPhases = $this->projectRepository->getProjectPhases();
         $organizations = $this->projectRepository->getOrganizations();
+        $countries = $this->projectRepository->getCountries();
         $buildingTypes = $this->projectRepository->getBuildingTypes();
-        $thresholds = $this->projectRepository->getthresholds();// Get Mandatory requirements
+        $thresholds = $this->projectRepository->getthresholds();
 
-        return view('projects.edit', compact('projectPhases', 'organizations', 'buildingTypes','project','thresholds'));   
-   
+        // Load regions for the project's saved country
+        $regions = $this->projectRepository->getRegions($project->country_code);
+        $buildingSubTypes = $this->projectRepository->getBuildingSubTypes($project->type_id);
+
+        return view('projects.edit', compact(
+            'projectPhases',
+            'organizations',
+            'buildingTypes',
+            'project',
+            'thresholds',
+            'countries',
+            'regions',
+            'buildingSubTypes'
+        ));
     }
     /*
     public function edit($id)
@@ -666,10 +696,15 @@ class ProjectController extends Controller
             $constructionAssessInfo = $this->projectRepository->getConstructionInfoByProjectId($id); 
             // To show in review page.. for final scoring and ratings...
             $constructionFinalScoreRating = $this->projectRepository->getPhaseFinalScoreRating($id,'Construction');
+            
+            $countries = $this->projectRepository->getCountries($id); 
+            $regions = $this->projectRepository->getRegions($project->country_code);
+            //print_r($regions);exit;
+            $buildingSubTypes = $this->projectRepository->getBuildingSubTypes($project->type_id);
 
             $thresholds = $this->projectRepository->getthresholds();// Get Mandatory requirements
 
-            return view('projects.edit', compact('projectPhases', 'organizations', 'buildingTypes',
+            return view('projects.edit', compact('projectPhases', 'organizations', 'buildingTypes','buildingSubTypes','countries','regions',
             'totalChecklistCount','project','projectCheckLists','planningAssessment','planningScoresRatings','planningFinalScoreRating',
             'designAssessmentInfo','designFinalScoreRating','constructionAssessInfo','constructionFinalScoreRating','thresholds'));   
 

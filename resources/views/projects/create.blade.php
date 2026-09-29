@@ -85,13 +85,7 @@
                                                             </div>
                                                         </div>
                                                         <!--end col-->
-                                                        <div class="col-xxl-3 col-md-6">
-                                                            <div>
-                                                                <label for="basiInput" class="form-label">Assessment Requirement</label>
-                                                                <input type="text" name="assessment_req" id="assessment_req" value="{{old('assessment_req')}}" class="form-control">    
-                                                            </div>
-                                                        </div>
-                                                        <!--end col-->
+                                                        
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
                                                                 <label for="cphase" class="form-label">Organization</label>
@@ -114,6 +108,14 @@
                                                         </div>
                                                         
                                                         <!--end col-->
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end card body -->
+                                            <div class="card-body">
+                                                <div class="live-preview">
+                                                    <div class="row gy-4">
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
                                                                 <label for="startdate" class="form-label">Project Start Date</label>
@@ -132,6 +134,28 @@
                                                             </div>
                                                         </div>
                                                         <!--end col-->
+                                                        <div class="col-xxl-3 col-md-6">
+                                                            <div>
+                                                                <label for="buildingtype" class="form-label">Country</label>
+                                                                    <select name="country_code" id="country_code" class="form-select" onchange="javascript: ajaxFormGet('create_project','{{ route('projects.getRegions') }}','region_code');return false;" required>
+                                                                        <option value="">-Select Country-</option>
+                                                                        @foreach($countries as $id => $country_name)
+                                                                            <option value="{{ $id }}" {{ old('country_code') == $id ? 'selected' : '' }}>{{ trim($country_name) }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <div class="invalid-feedback">Please select country</div>
+                                                            </div>
+                                                        </div>
+                                                        <!--end col-->
+                                                        <div class="col-xxl-3 col-md-6">
+                                                            <div>
+                                                                <label for="regions" class="form-label">Region</label>
+                                                                <select name="region_code" id="region_code" class="form-select" required>
+                                                                    <option value="">-Select Region-</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!--end col-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -141,36 +165,6 @@
                                                     <div class="row gy-4">
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="country" class="form-label">Country</label>
-                                                                <select class="form-select" name="country_code" style="width: 100%;">
-                                                                    <option selected="selected">Alabama</option>
-                                                                    <option>Alaska</option>
-                                                                    <option>California</option>
-                                                                    <option>Delaware</option>
-                                                                    <option>Tennessee</option>
-                                                                    <option>Texas</option>
-                                                                    <option>Washington</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <!--end col-->
-                                                        <div class="col-xxl-3 col-md-6">
-                                                            <div>
-                                                                <label for="region" class="form-label">Region</label>
-                                                                <select class="form-select" name="region_code" style="width: 100%;">
-                                                                    <option selected="selected">Alabama</option>
-                                                                        <option>Alaska</option>
-                                                                        <option>California</option>
-                                                                        <option>Delaware</option>
-                                                                        <option>Tennessee</option>
-                                                                        <option>Texas</option>
-                                                                        <option>Washington</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <!--end col-->
-                                                        <div class="col-xxl-3 col-md-6">
-                                                            <div>
                                                                 <label for="location" class="form-label">Location  (Site / HO)</label>
                                                                 <input type="text" name="location" id="location" value="{{old('location')}}" class="form-control">    
                                                             </div>
@@ -178,12 +172,29 @@
                                                         <!--end col-->
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="coordiates" class="form-label">GPS Coordinates</label>
-                                                                <input type="text" name="coordinates" id="coordinates" value="{{old('coordinates')}}" class="form-control"> 
-                                                                <div class="invalid-feedback">Please coordinates in decimal</div>   
+                                                                <label for="coordiates" class="form-label">Coordinates (latitude)</label>
+                                                                <input type="text" name="latitude" id="latitude" value="{{old('coordinates')}}" class="form-control" placeholder="exp: 33.5651"> 
+                                                                <div class="invalid-feedback">Please latitude in decimal</div>   
                                                             </div>
                                                         </div>
                                                         <!--end col-->
+                                                        <div class="col-xxl-3 col-md-6">
+                                                            <div>
+                                                                <label for="coordiates" class="form-label">Coordinates (longitude)</label>
+                                                                <input type="text" name="longitude" id="longitude" value="{{old('coordinates')}}" class="form-control" placeholder="exp: 73.0169"> 
+                                                                <div class="invalid-feedback">Please longitude in decimal</div>   
+                                                            </div>
+                                                        </div>
+                                                        <!--end col-->
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end card body -->
+                                                        
+                                            <div class="card-body">
+                                                <div class="live-preview">
+                                                    <div class="row gy-4">
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
                                                                 <label for="buildingtype" class="form-label">Building Type</label>
@@ -210,7 +221,7 @@
                                                             <div>
                                                                 <label for="conscost" class="form-label">Construction Cost (USD)
                                                                     </label>
-                                                                    <input type="number" name="construction_cost" id="construction_cost" value="{{old('construction_cost')}}" class="form-control" placeholder="Exp 9999.99" required>
+                                                                    <input type="number" name="construction_cost" id="construction_cost" value="{{old('construction_cost')}}" class="form-control" placeholder="exp: 9999.99" required>
                                                                     <div class="invalid-feedback">Please enter construction cost</div>
                                                             </div>
                                                         </div>
@@ -227,6 +238,16 @@
                                                             </div>
                                                         </div>
                                                         <!--end col-->
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end card body -->
+                                                        
+                                            <div class="card-body">
+                                                <div class="live-preview">
+                                                    <div class="row gy-4">
+                                                        
                                                         <div class="col-xxl-6 col-md-6">
                                                             <div>
                                                                 <label for="exampleInputpassword" class="form-label">Mandatory Requirement

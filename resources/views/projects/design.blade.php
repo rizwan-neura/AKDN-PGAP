@@ -19,7 +19,7 @@
                                     <tr >
                                         <th style="width: 5%; word-wrap: break-word; white-space: normal;"></th>
                                         <th  class="text-end align-middle">Is the construction cost (USD) changed at design phase:
-                                            <i style="color: red;"><b>( * )</b></i>
+                                            <span class="required-star">*</span>
                                         
                                         <th width="10%"><input type="text" name="cost_at_design" id="cost_at_design" class="form-control" value="{{ old('cost_at_design', $project->cost_at_design) }}">
                                         </th>
@@ -61,41 +61,52 @@
                                     <td style="width: 55%;">
                                         {{ $row->indicator_name }}
                                         @if($row->is_mandatory === 1)
-                                            <i style="color: red;"><b>(*)</b></i>
+                                        <span class="required-star">*</span>
                                         @endif
                                     </td>
                         
                                     <!-- Compliance Dropdown -->
                                     <td style="width: 10%;">
-                                        <select class="form-select" name="compliance">
-                                            <option value="">Choose</option>
-                        
-                                            @if ($row->id === 4)
-                                                <option value="2" @selected(old('compliance', $row->compliances_id) == '2')>YES</option>
-                                                <option value="4" @selected(old('compliance', $row->compliances_id) == '4')>No but it is upto 30% more than the aspirational value</option>
-                                                <option value="5" @selected(old('compliance', $row->compliances_id) == '5')>No but it is 30% to 50% more than the aspirational value</option>
-                                                <option value="6" @selected(old('compliance', $row->compliances_id) == '6')>No but it is 50% to 70% more than the aspirational value</option>
-                                                <option value="7" @selected(old('compliance', $row->compliances_id) == '7')>No but it is 70% more than the aspirational value</option>
-                                            
-                                            @elseif ($row->id === 5)
-                                                <option value="2" @selected(old('compliance', $row->compliances_id) == '2')>YES</option>
-                                                <option value="8" @selected(old('compliance', $row->compliances_id) == '8')>No but a generator is suggested based on < 5% use of normal operations </option>
-                                                <option value="1" @selected(old('compliance', $row->compliances_id) == '1')>NO</option>
-                                            
-                                            @elseif ($row->id === 8)
-                                                <option value="1" @selected(old('compliance', $row->compliances_id) == '1')>NO</option>
-                                                <option value="9" @selected(old('compliance', $row->compliances_id) == '9')>Yes, the on-site generation is > 80% <= 100%</option>
-                                                <option value="10" @selected(old('compliance', $row->compliances_id) == '10')>Yes, the on-site generation is > 50% < 80%</option>
-                                                <option value="11" @selected(old('compliance', $row->compliances_id) == '11')>Yes, the on-site generation is > 30% < 50%</option>
-                                                <option value="12" @selected(old('compliance', $row->compliances_id) == '12')>Yes, the on-site generation is > 30% < 50%</option>
-                                                <option value="13" @selected(old('compliance', $row->compliances_id) == '13')>Yes, the on-site generation is > 15% < 30%</option>
-                        
-                                            @else
-                                                <option value="2" @selected(old('compliance', $row->compliances_id) == '2')>YES</option>
-                                                <option value="1" @selected(old('compliance', $row->compliances_id) == '1')>NO</option>
-                                                <option value="3" @selected(old('compliance', $row->compliances_id) == '3')>N/A</option>
-                                            @endif
-                                        </select>
+                                        
+                                        @if ($row->id === 4)
+                                            <input type="number"
+                                            min="0"
+                                            max="1"
+                                            step="0.01"
+                                            oninput="if (this.value > 1) this.value = 1;"
+                                            name="compliance_31_value"
+                                            id="compliance_31_value"
+                                            class="form-control"
+                                            value="{{ old('compliance_31_value', $row->compliance_31_value) }}"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="The value cannot be more than 1. Example: Improved case / Base case = 124 / 150 = 0.82">
+                                        @else
+                                            <select class="form-select" name="compliance">
+                                                <option value="">Choose</option>
+                            
+                                                @if ($row->id === 5)
+                                                    <option value="2" @selected(old('compliance', $row->compliances_id) == '2')>YES</option>
+                                                    <option value="8" @selected(old('compliance', $row->compliances_id) == '8')>No but a generator is suggested based on < 5% use of normal operations </option>
+                                                    <option value="1" @selected(old('compliance', $row->compliances_id) == '1')>NO</option>
+                                                
+                                                @elseif ($row->id === 8)
+                                                    <option value="1" @selected(old('compliance', $row->compliances_id) == '1')>NO</option>
+                                                    <option value="9" @selected(old('compliance', $row->compliances_id) == '9')>Yes, the on-site generation is > 80% <= 100%</option>
+                                                    <option value="10" @selected(old('compliance', $row->compliances_id) == '10')>Yes, the on-site generation is > 50% < 80%</option>
+                                                    <option value="11" @selected(old('compliance', $row->compliances_id) == '11')>Yes, the on-site generation is > 30% < 50%</option>
+                                                    <option value="12" @selected(old('compliance', $row->compliances_id) == '12')>Yes, the on-site generation is > 30% < 50%</option>
+                                                    <option value="13" @selected(old('compliance', $row->compliances_id) == '13')>Yes, the on-site generation is > 15% < 30%</option>
+                                                @elseif ($row->id === 6)
+                                                    <option value="15" @selected(old('compliance', $row->compliances_id) == '15')>YES</option>
+                                                    <option value="14" @selected(old('compliance', $row->compliances_id) == '14')>NO</option>
+                                                @else
+                                                    <option value="2" @selected(old('compliance', $row->compliances_id) == '2')>YES</option>
+                                                    <option value="1" @selected(old('compliance', $row->compliances_id) == '1')>NO</option>
+                                                    <option value="3" @selected(old('compliance', $row->compliances_id) == '3')>N/A</option>
+                                                @endif
+                                            </select>
+                                        @endif
                                     </td>
                         
                                     <!-- File Input -->
