@@ -5,6 +5,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -55,7 +56,11 @@ Route::middleware('auth')->group(function () {
     Route::get('projects/{project}/construction', [ProjectController::class, 'construction'])->name('projects.construction');
     Route::get('projects/{project}/construction-review', [ProjectController::class, 'constructionReview'])->name('projects.consreview');
 
-
+    Route::middleware('admin')->group(function () {
+        Route::get('users/access', [UserController::class, 'access'])->name('users.access');
+        Route::resource('users', UserController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
+    });
 
    //Route::post('updatechecklist', [ProjectController::class, 'updateCheckList'])->name('projects.updateCheckList');  
 });
