@@ -22,11 +22,47 @@ class ProjectRepository
 {
     public function getAll($request)
     {
-        $limit = env('PER_PAGE_LIMIT', 10);
-        $projects= Project::with(['current_phase:id,phase_name','organization:id,organization_name','building_type:id,type_name'])
-        ->orderBy('id', 'DESC')->paginate($limit)->setPath('');
-        $projects->appends($request->all());
-        return $projects;
+        $limit = env('PER_PAGE_LIMIT', 12);
+        $user = auth()->user();
+
+        $query = Project::query()
+            ->leftJoin('users', 'projects.created_by', '=', 'users.id')
+            ->leftJoin('countries', 'projects.country_code', '=', 'countries.country_code')
+            ->select(
+                'projects.*',
+                'users.first_name as creator_first_name',
+                'users.last_name as creator_last_name',
+                'countries.country_name'
+            )
+            ->with([
+                'current_phase:id,phase_name',
+                'organization:id,organization_name',
+                'building_type:id,type_name',
+            ]);
+
+        // Role ID 3: ACFP — Level 01
+        // Own organisation and own country.
+        if ((int) $user->role_id === 3) {
+
+            $query->where('projects.organization_id', $user->organization_id)
+                ->where('projects.country_code', $user->country_code);
+
+        }
+
+        // Role ID 4: Global AFP — Level 02
+        // Own organisation, all countries.
+        elseif ((int) $user->role_id === 4) {
+
+            $query->where('projects.organization_id', $user->organization_id);
+
+        }
+
+        // Role IDs 1, 2, 5 and 6:
+        // All organisations and all countries.
+
+        return $query->orderByDesc('projects.id')
+                    ->paginate($limit)
+                    ->appends($request->all());
     }
     
     public function getById($id)

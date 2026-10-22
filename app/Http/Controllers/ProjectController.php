@@ -1,12 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProjectRequest;
-
 use App\Repositories\ProjectRepository;
 
 use App\Http\Requests\ProjectChecklistRequest;
@@ -15,14 +12,16 @@ use App\Http\Requests\DesignAssessRequest;
 use App\Http\Requests\ConstructionAssessRequest;
 use App\Http\Requests\CommentsRequest;
 use App\Http\Requests\ExecutiveSummaryRequest;
-
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+
+use App\Models\Project;
+
 
 class ProjectController extends Controller
 {
@@ -34,28 +33,41 @@ class ProjectController extends Controller
     {
         $this->projectRepository = $projectRepository;
         
-       
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        /*dd([
+            'role_id' => auth()->user()->role_id,
+            'total_projects' => \App\Models\Project::count(),
+            'filtered_total' => $this->projectRepository
+                ->getAll($request)
+                ->total(),
+        ]);*/
         $data = $this->projectRepository->getAll($request);
         //dd($data);
         return view('projects.index', compact('data'));   
     }
-    /**
-     * Show the form for creating a new resource.
-     */
+    
     public function create()
     {
         $projectPhases = $this->projectRepository->getProjectPhases();
-        $organizations = $this->projectRepository->getOrganizations();
+
+        [$organizations, $countries] =
+            $this->getAllowedProjectDropdowns();
+
         $buildingTypes = $this->projectRepository->getBuildingTypes();
-        $countries = $this->projectRepository->getCountries();
-        $thresholds = $this->projectRepository->getthresholds();// Get Mandatory requirements
-        return view('projects.create', compact('projectPhases', 'organizations', 'buildingTypes','thresholds','countries'));   
+        $thresholds = $this->projectRepository->getthresholds();
+
+        return view('projects.create', compact(
+            'projectPhases',
+            'organizations',
+            'buildingTypes',
+            'thresholds',
+            'countries'
+        ));
     }
     /**
      * Store a newly created resource in storage.
@@ -67,7 +79,8 @@ class ProjectController extends Controller
         return redirect()->to(route('projects.edit',$project->id))->with(['message' => 'Project has been added successfully.']);
     }
         */
-    public function store(ProjectRequest $request)
+    /*
+        public function store(ProjectRequest $request)
     {
         try {
                 $project = $this->projectRepository->create($request);   
@@ -85,6 +98,27 @@ class ProjectController extends Controller
             ], 500);
         }
             
+    }*/
+    public function store(ProjectRequest $request)
+    {
+        $this->validateProjectDropdownAccess($request);
+
+        try {
+            $project = $this->projectRepository->create($request);
+
+            return response()->json([
+                'status' => 'success',
+                'redirect_url' => route('projects.edit', $project->id),
+                'project_id' => $project->id
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Save info failed: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred during data upload.',
+            ], 500);
+        }
     }
     /**
      * Display the subtype dropdowns.
@@ -108,7 +142,9 @@ class ProjectController extends Controller
     /**
      * Save project checklists information.
      */
-    public function getRegions(Request $request)
+    
+    /*
+     public function getRegions(Request $request)
     {
         //return response()->json(['data' => $request->country_code]);
         $regions = $this->projectRepository->getRegions($request->country_code);
@@ -123,6 +159,36 @@ class ProjectController extends Controller
                 'status' => $statusCode
             ];
             return response()->json($response, $statusCode);
+    }
+            */
+    public function getRegions(Request $request)
+    {
+        $request->validate([
+            'country_code' => ['required', 'integer'],
+        ]);
+    
+        $user = Auth::user();
+        $countryCode = $request->input('country_code');
+    
+        // Role 3 (ACFP) cannot request regions for another country.
+        if ((int) $user->role_id === 3) {
+            abort_unless(
+                (string) $countryCode === (string) $user->country_code,
+                403,
+                'You are not authorized to access regions for this country.'
+            );
+        }
+    
+        $regions = $this->projectRepository->getRegions($countryCode);
+    
+        $data = view('projects.regions', compact('regions'))->render();
+    
+        return response()->json([
+            'message' => 'Data found',
+            'success' => true,
+            'data' => $data,
+            'status' => 200
+        ]);
     }
    
    public function saveCheckList(ProjectChecklistRequest $request)
@@ -165,7 +231,7 @@ class ProjectController extends Controller
 
                 return response()->json([
                     'status' => 'success',
-                    'message' => $checklist ? 'Checklist updated!' : 'Checklist saved!',
+                    'message' => $checklist ? 'Info updated successfully!' : 'Checklist saved!',
                     'file_name' => $filename,
                     'file_url' => $file ? Storage::url($path) : null,
                     'checklist_id' => $request->checklist_id,
@@ -179,7 +245,7 @@ class ProjectController extends Controller
 
                 return response()->json([
                     'status' => 'success',
-                    'message' => $checklist ? 'Checklist saved!' : 'Checklist saved!',
+                    'message' => $checklist ? 'Info saved successfully!' : 'Checklist saved!',
                     'file_name' => $filename,
                     'file_url' => $file ? Storage::url($path) : null,
                     'checklist_id' => $request->checklist_id,
@@ -198,7 +264,7 @@ class ProjectController extends Controller
     public function deleteChecklistFile(Request $request)
     {
         $this->projectRepository->resetProjectChecklistInfo($request->updatedProjectId,$request->checklist_id);
-        return response()->json(['status' => 'success', 'message' => 'File deleted.']);
+        return response()->json(['status' => 'success', 'message' => 'File deleted successfully!']);
     }
     public function savePlanningAssessment(PlanningAssessRequest $request)
     {
@@ -474,7 +540,7 @@ class ProjectController extends Controller
                 
                 return response()->json([
                     'status' => 'success',
-                    'message' => $dataExists ? 'Info updated successfully!!' : 'Info saved!',
+                    'message' => $dataExists ? 'Info updated successfully!' : 'Info saved!',
                     'file_name' => $filename,
                     'file_url' => $file ? Storage::url($path) : null,
                     'indicator_id' => $request->indicator_id,
@@ -532,9 +598,12 @@ class ProjectController extends Controller
         $project = $this->projectRepository->getById($id);
         
         $projectPhases = $this->projectRepository->getProjectPhases();
-        $organizations = $this->projectRepository->getOrganizations();
-        $countries = $this->projectRepository->getCountries();
-        $buildingTypes = $this->projectRepository->getBuildingTypes();
+        //$organizations = $this->projectRepository->getOrganizations();
+        //$countries = $this->projectRepository->getCountries();
+        [$organizations, $countries] =
+         $this->getAllowedProjectDropdowns();
+        
+         $buildingTypes = $this->projectRepository->getBuildingTypes();
         $thresholds = $this->projectRepository->getthresholds();
 
         // Load regions for the project's saved country
@@ -666,6 +735,8 @@ class ProjectController extends Controller
      */
     public function update(ProjectRequest $request, string $id)
     {
+        $this->validateProjectDropdownAccess($request);
+        
         try {
             $this->projectRepository->update($id, $request);
             session()->flash('success', 'Project updated successfully.');
@@ -697,8 +768,11 @@ class ProjectController extends Controller
             // To show in review page.. for final scoring and ratings...
             $constructionFinalScoreRating = $this->projectRepository->getPhaseFinalScoreRating($id,'Construction');
             
-            $countries = $this->projectRepository->getCountries($id); 
-            $regions = $this->projectRepository->getRegions($project->country_code);
+            //$countries = $this->projectRepository->getCountries($id); 
+            [$organizations, $countries] =
+                $this->getAllowedProjectDropdowns();
+            
+                $regions = $this->projectRepository->getRegions($project->country_code);
             //print_r($regions);exit;
             $buildingSubTypes = $this->projectRepository->getBuildingSubTypes($project->type_id);
 
@@ -715,10 +789,124 @@ class ProjectController extends Controller
     }
 
     /**
+     * Return organizations and countries permitted for the logged-in user.
+     */
+    private function getAllowedProjectDropdowns(): array
+    {
+        $user = Auth::user();
+
+        $organizations = $this->projectRepository->getOrganizations();
+        $countries = $this->projectRepository->getCountries();
+
+        // Role 3 (ACFP) and Role 4 (Global AFP):
+        // Only their own organization.
+        if (in_array((int) $user->role_id, [3, 4], true)) {
+            $organizations = $organizations->only([
+                $user->organization_id
+            ]);
+        }
+
+        // Role 3 (ACFP): only their assigned country.
+        if ((int) $user->role_id === 3) {
+            $countries = $countries->only([
+                $user->country_code
+            ]);
+        }
+
+        return [$organizations, $countries];
+    }
+
+    /**
+     * Validate organization, country, and region permissions server-side.
+     */
+    private function validateProjectDropdownAccess(Request $request): void
+    {
+        [$organizations, $countries] = $this->getAllowedProjectDropdowns();
+
+        $countryCode = $request->input('country_code');
+
+        $regions = $this->projectRepository->getRegions($countryCode);
+
+        $request->validate([
+            'organization_id' => [
+                'required',
+                Rule::in($organizations->keys()->all()),
+            ],
+            'country_code' => [
+                'required',
+                Rule::in($countries->keys()->all()),
+            ],
+            'region_code' => [
+                'required',
+                Rule::in($regions->keys()->all()),
+            ],
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Project $project)
     {
-        //
+        // Super Admin only (Role ID 1).
+        abort_unless(
+            auth()->check() && (int) auth()->user()->role_id === 1,
+            403,
+            'You are not authorized to delete projects.'
+        );
+
+        // Collect uploaded file paths before database cascading deletes.
+        $filePaths = [];
+
+        $fileTables = [
+            'project_checklists',
+            'planning_assessment',
+            'design_assessment',
+            'construction_assessment',
+        ];
+
+        foreach ($fileTables as $table) {
+            $paths = DB::table($table)
+                ->where('project_id', $project->id)
+                ->whereNotNull('file_path')
+                ->pluck('file_path');
+
+            foreach ($paths as $path) {
+                $path = trim($path);
+
+                if ($path !== '') {
+                    $filePaths[] = $path;
+                }
+            }
+        }
+
+        $filePaths = array_unique($filePaths);
+
+        // Delete the project. Existing database cascades remove related rows.
+        DB::transaction(function () use ($project) {
+            $project->delete();
+        });
+
+        // Delete uploaded files after the database transaction succeeds.
+        foreach ($filePaths as $path) {
+            try {
+                if (! Storage::disk('public')->delete($path)) {
+                    Log::warning('Could not delete a PGAP project file.', [
+                        'project_id' => $project->id,
+                        'file_path' => $path,
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                Log::error('Error deleting a PGAP project file.', [
+                    'project_id' => $project->id,
+                    'file_path' => $path,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return redirect()
+            ->route('projects.index')
+            ->with('success', 'Project and related records deleted successfully.');
     }
 }

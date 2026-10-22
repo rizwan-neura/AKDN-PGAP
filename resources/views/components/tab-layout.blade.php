@@ -7,21 +7,26 @@
 @endsection
 
 @section('content')
-    @component('components.breadcrumb')
-        @slot('li_1') Forms @endslot
-        @slot('title') PGAP - Tool @endslot
-    @endcomponent
+    
+@php
+    $workflowRoleId = (int) auth()->user()->role_id;
+    $workflowIsManagement = in_array($workflowRoleId, [1, 2, 6], true);
+    $workflowCanSeeDesign = $workflowIsManagement
+        || ! in_array($workflowRoleId, [3, 4, 5], true)
+        || (($project->planning_workflow_status ?? 'draft') === 'reviewed');
+    $workflowCanSeeConstruction = $workflowIsManagement
+        || ! in_array($workflowRoleId, [3, 4, 5], true)
+        || (($project->design_workflow_status ?? 'draft') === 'reviewed');
+@endphp
 
     <div class="row">
         <div class="col-xl-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="text-green-heading">Project's Green Building Assurance Performances</h4>
-                </div>
-                <div class="card-body">
+                
+                <div class="card-body py-1">
                     {{-- Tabs Navigation --}}
-                    <div class="step-arrow-nav mb-4">
-                        <ul class="nav nav-pills mb-3" id="wizardSteps">
+                    <div class="step-arrow-nav mb-1 project-tabs-wrapper">
+                        <ul class="nav nav-pills flex-nowrap mb-2" id="wizardSteps">
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('projects.edit') ? 'active' : '' }}" href="{{ route('projects.edit', $project->id) }}">Create Project</a>
                             </li>
@@ -37,18 +42,26 @@
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('projects.planningreview') ? 'active' : '' }}" href="{{ route('projects.planningreview', $project->id) }}">Planning Review</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('projects.design') ? 'active' : '' }}" href="{{ route('projects.design', $project->id) }}">Design</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('projects.designreview') ? 'active' : '' }}" href="{{ route('projects.designreview', $project->id) }}">Design Review</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('projects.construction') ? 'active' : '' }}" href="{{ route('projects.construction', $project->id) }}">Construction</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('projects.consreview') ? 'active' : '' }}" href="{{ route('projects.consreview', $project->id) }}">Construction Review</a>
-                            </li>
+                            
+                            @if ($workflowCanSeeDesign)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('projects.design') ? 'active' : '' }}" href="{{ route('projects.design', $project->id) }}">Design</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('projects.designreview') ? 'active' : '' }}" href="{{ route('projects.designreview', $project->id) }}">Design Review</a>
+                                </li>
+                            @endif
+                            
+                            @if ($workflowCanSeeConstruction)
+                            
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('projects.construction') ? 'active' : '' }}" href="{{ route('projects.construction', $project->id) }}">Construction</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('projects.consreview') ? 'active' : '' }}" href="{{ route('projects.consreview', $project->id) }}">Construction Review</a>
+                                </li>
+                            @endif
+                        
                         </ul>
                     </div>
 

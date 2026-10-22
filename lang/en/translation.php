@@ -227,6 +227,8 @@ return [
 
     "create-project"=>"Create Project",
     "show-projects"=>"Show Projects",
+    "show-users"=>"Show Users",
+    "manage-users"=>"Manage Users",
 ];
 ?>
 

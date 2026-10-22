@@ -3,29 +3,18 @@
     @lang('translation.wizard')
 @endsection
 @section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
-            Forms
-        @endslot
-        @slot('title')
-            PGAP - Tool
-        @endslot
-    @endcomponent
+   
 
     <div class="row">
         
         <div class="col-xl-12">
 
             <div class="card">
-                <div class="card-header">
-                    <h4 class="text-green-heading">Project's Green Building Assurance Performances</h4>
-                </div><!-- end card header -->
+                
                 <div class="card-body">
                     <form action="#" class="form-steps" autocomplete="off" name="create_project" id="create_project" method="POST">
                         @csrf 
                         <div class="step-arrow-nav mb-4">
-
-                           
 
                             <ul class="nav nav-pills mb-3" id="wizardSteps">
                                 <li class="nav-item">
@@ -61,12 +50,12 @@
                                     <div class="col-lg-12">
                                         <div class="card">
                                             
-                                            <div class="card-body">
+                                            <div class="card-body py-0" >
                                                 <div class="live-preview">
                                                     <div class="row gy-4">
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="basiInput" class="form-label">Project Name</label>
+                                                                <label for="basiInput" class="form-label">Project Name</label><span class="required-star">*</span>
                                                                 <input type="text" name="project_name" value="{{old('project_name')}}" class="form-control" required>
                                                                 <div class="invalid-feedback">Please enter project name</div>
                                                             </div>
@@ -74,7 +63,7 @@
                                                         <!--end col-->
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="cphase" class="form-label">Current Phase</label>
+                                                                <label for="cphase" class="form-label">Current Phase</label><span class="required-star">*</span>
                                                                 <select name="phase_id" class="form-select" required>
                                                                     <option value="">-Select Phase-</option>
                                                                     @foreach($projectPhases as $id => $phase_name)
@@ -88,7 +77,7 @@
                                                         
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="cphase" class="form-label">Organization</label>
+                                                                <label for="cphase" class="form-label">Organization</label><span class="required-star">*</span>
                                                                 <select name="organization_id" id="organization_id" class="form-select" required>
                                                                     <option value="">-Select Organization-</option>
                                                                     @foreach($organizations as $id => $organization_name)
@@ -101,7 +90,7 @@
                                                         <!--end col-->
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="date_gpa" class="form-label">Date of GBA* Performance</label>
+                                                                <label for="date_gpa" class="form-label">Date of GBA* Performance</label><span class="required-star">*</span>
                                                                 <input type="date" class="form-control" id="date_gpa" name="date_gpa" value="{{old('date_gpa')}}" required>
                                                                 <div class="invalid-feedback">Please select Date of GBA*</div>
                                                             </div>
@@ -113,12 +102,12 @@
                                                 </div>
                                             </div>
                                             <!-- end card body -->
-                                            <div class="card-body">
+                                            <div class="card-body py-2">
                                                 <div class="live-preview">
                                                     <div class="row gy-4">
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="startdate" class="form-label">Project Start Date</label>
+                                                                <label for="startdate" class="form-label">Project Start Date</label><span class="required-star">*</span>
                                                                 <input type="date" name="start_date" value="{{old('start_date')}}" class="form-control"
                                                                     required>
                                                                     <div class="invalid-feedback">Please select start date</div>
@@ -127,7 +116,7 @@
                                                         <!--end col-->
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="enddate" class="form-label">Project End Date</label>
+                                                                <label for="enddate" class="form-label">Project End Date</label><span class="required-star">*</span>
                                                                 <input type="date" name="end_date" value="{{old('end_date')}}" class="form-control"
                                                                     required>
                                                                     <div class="invalid-feedback">Please select end date</div>
@@ -160,7 +149,7 @@
                                                 </div>
                                             </div>
                                             <!-- end card body -->
-                                            <div class="card-body">
+                                            <div class="card-body py-2">
                                                 <div class="live-preview">
                                                     <div class="row gy-4">
                                                         <div class="col-xxl-3 col-md-6">
@@ -192,12 +181,12 @@
                                             </div>
                                             <!-- end card body -->
                                                         
-                                            <div class="card-body">
+                                            <div class="card-body py-2">
                                                 <div class="live-preview">
                                                     <div class="row gy-4">
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
-                                                                <label for="buildingtype" class="form-label">Building Type</label>
+                                                                <label for="buildingtype" class="form-label">Building Type</label><span class="required-star">*</span>
                                                                     <select name="type_id" id="type_id" class="form-select" onchange="javascript: ajaxFormGet('create_project','{{ route('projects.getBuildingSubTypes') }}','sub_type_id');return false;" required>
                                                                         <option value="">-Select Type-</option>
                                                                         @foreach($buildingTypes as $id => $type_name)
@@ -220,7 +209,7 @@
                                                         <div class="col-xxl-3 col-md-6">
                                                             <div>
                                                                 <label for="conscost" class="form-label">Construction Cost (USD)
-                                                                    </label>
+                                                                    </label><span class="required-star">*</span>
                                                                     <input type="number" name="construction_cost" id="construction_cost" value="{{old('construction_cost')}}" class="form-control" placeholder="exp: 9999.99" required>
                                                                     <div class="invalid-feedback">Please enter construction cost</div>
                                                             </div>
@@ -244,7 +233,7 @@
                                             </div>
                                             <!-- end card body -->
                                                         
-                                            <div class="card-body">
+                                            <div class="card-body py-2">
                                                 <div class="live-preview">
                                                     <div class="row gy-4">
                                                         
@@ -275,85 +264,77 @@
                                 </div>
                                 
                                 <div class="text-start">
-                                    <button type="button" class="btn btn-success"
-                                    onclick="saveTabData('step1', '{{ route('projects.store') }}')">Create Project</button>
-                                <button type="button" class="btn btn-primary next-step" data-next="#step2">Next
-                                    
-                                </button>
+                                    <button type="button" class="btn btn-green-heading btn-sm add-btn"
+                                        onclick="saveTabData('step1', '{{ route('projects.store') }}')">Save Project</button>
+                                    <button type="button" class="btn btn-primary btn-sm next-step" data-next="#step2">Next</button>
                                 </div>    
                             </form>
                             </div>
                           
                             <div class="tab-pane fade" id="step2">
                               <form class="needs-validation" novalidate>
-                                    <div class="col-xl-12 col-md-12">
-                                            <blockquote class="blockquote custom-blockquote blockquote-info rounded material-shadow mb-0">
-                                                <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
-                                            </blockquote>
-                                    </div>
+                                <div class="col-xl-12 col-md-12">
+                                    
+                                        <p class="text-body mb-0">
+                                            Kindly ensure the previous steps are completed before proceeding.
+                                        </p>
+                                   
+                                </div>
                                 <div style="margin-top: 30px;"></div>
-                                <button type="button" class="btn btn-secondary prev-step" data-prev="#step1">Previous</button>
-                                <button type="button" class="btn btn-primary next-step" data-next="#step3">Next</button>
+                                <button type="button" class="btn btn-green-heading btn-sm  prev-step" data-prev="#step1">Previous</button>
+                                <button type="button" class="btn btn-primary btn-sm  next-step" data-next="#step3">Next</button>
                               </form>
                             </div>
                           
                             <div class="tab-pane fade" id="step3">
                                 <form class="needs-validation" novalidate>
                                     <div class="col-xl-12 col-md-12">
-                                        <blockquote class="blockquote custom-blockquote blockquote-info rounded material-shadow mb-0">
+                                        
                                             <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
-                                        </blockquote>
+                                        
                                     </div>
                                     <div style="margin-top: 30px;"></div>
-                                    <button type="button" class="btn btn-secondary prev-step" data-prev="#step2">Previous</button>
-                                    <button type="button" class="btn btn-primary next-step" data-next="#step4">Next</button>
+                                    <button type="button" class="btn btn-green-heading  btn-sm  prev-step" data-prev="#step2">Previous</button>
+                                    <button type="button" class="btn btn-primary btn-sm  next-step" data-next="#step4">Next</button>
                                   </form>
                             </div>
                             <div class="tab-pane fade" id="step4">
                                 <form class="needs-validation" novalidate>
                                     <div class="col-xl-12 col-md-12">
-                                        <blockquote class="blockquote custom-blockquote blockquote-info rounded material-shadow mb-0">
-                                            <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
-                                        </blockquote>
+                                        <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
                                     </div>
                                     <div style="margin-top: 30px;"></div>
-                                    <button type="button" class="btn btn-secondary prev-step" data-prev="#step3">Previous</button>
-                                    <button type="button" class="btn btn-primary next-step" data-next="#step5">Next</button>
+                                    <button type="button" class="btn btn-green-heading btn-sm  prev-step" data-prev="#step3">Previous</button>
+                                    <button type="button" class="btn btn-primary btn-sm  next-step" data-next="#step5">Next</button>
                                   </form>
                             </div>
                             <div class="tab-pane fade" id="step5">
                                 <form class="needs-validation" novalidate>
                                     <div class="col-xl-12 col-md-12">
-                                        <blockquote class="blockquote custom-blockquote blockquote-info rounded material-shadow mb-0">
-                                            <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
-                                        </blockquote>
+                                        <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
                                     </div>
                                     <div style="margin-top: 30px;"></div>
-                                    <button type="button" class="btn btn-secondary prev-step" data-prev="#step4">Previous</button>
-                                    <button type="button" class="btn btn-primary next-step" data-next="#step6">Next</button>
+                                    <button type="button" class="btn btn-green-heading btn-sm  prev-step" data-prev="#step4">Previous</button>
+                                    <button type="button" class="btn btn-primary btn-sm  next-step" data-next="#step6">Next</button>
                                   </form>
                             </div>
                             <div class="tab-pane fade" id="step6">
                                 <form class="needs-validation" novalidate>
                                     <div class="col-xl-12 col-md-12">
-                                        <blockquote class="blockquote custom-blockquote blockquote-info rounded material-shadow mb-0">
-                                            <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
-                                        </blockquote>
+                                        <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
                                     </div>
                                     <div style="margin-top: 30px;"></div>
-                                    <button type="button" class="btn btn-secondary prev-step" data-prev="#step5">Previous</button>
-                                    <button type="button" class="btn btn-primary next-step" data-next="#step7">Next</button>
+                                    <button type="button" class="btn btn-green-heading btn-sm  prev-step" data-prev="#step5">Previous</button>
+                                    <button type="button" class="btn btn-primary btn-sm  next-step" data-next="#step7">Next</button>
                                   </form>
                             </div>
                             <div class="tab-pane fade" id="step7">
                                 <form class="needs-validation" novalidate>
                                     <div class="col-xl-12 col-md-12">
-                                        <blockquote class="blockquote custom-blockquote blockquote-info rounded material-shadow mb-0">
-                                            <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
-                                        </blockquote>
+                                        <p class="text-body mb-2">Kindly ensure the previous steps are completed before proceeding.</p>
                                     </div>
                                     <div style="margin-top: 30px;"></div>
-                                    <button type="button" class="btn btn-secondary prev-step" data-prev="#step6">Previous</button>
+                                    <button type="button" class="btn btn-green-heading btn-sm  prev-step" data-prev="#step6">Previous</button>
                                     
                                   </form>
                             </div>

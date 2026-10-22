@@ -68,7 +68,7 @@
                            aria-expanded="{{ request()->routeIs('users.*') ? 'true' : 'false' }}"
                            aria-controls="sidebarUserManagement">
                             <i class="ri-user-settings-line"></i>
-                            <span>@lang('translation.user-management')</span>
+                            <span>@lang('translation.manage-users')</span>
                         </a>
 
                         <div class="collapse menu-dropdown {{ request()->routeIs('users.*') ? 'show' : '' }}"
@@ -77,7 +77,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('users.index') }}"
                                        class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}">
-                                        @lang('translation.users')
+                                        @lang('translation.show-users')
                                     </a>
                                 </li>
 

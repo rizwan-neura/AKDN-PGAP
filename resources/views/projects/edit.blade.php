@@ -1,63 +1,70 @@
 {{-- resources/views/projects/edit.blade.php --}}
 <x-tab-layout :project="$project">
     
-    <div class="text-start">
+    <div class="text-start py-0 ms-3">
         <form id="design_cost_form" method="POST" class="mb-0">
-        @csrf   
-        <table class="table align-start table-nowrap mb-0">
-            <thead>
-                <!-- Question 1 -->
-                <tr>
-                    <th width="25%" class="text-start align-middle">
-                        Has this project been reviewed by CSA before? <span class="required-star">*</span>
-                    </th>
-                    <th width="25%" class="text-start align-middle">
-                        <select name="reviewed_before" id="reviewed_before" class="form-select" required>
-                            <option value="">-Select-</option>
-                            <option value="YES">YES</option>
-                            <option value="NO">NO</option>
-                        </select>
-                    </th>
-                    <th class="align-middle"></th>
-                </tr>
-        
-                <!-- Question 2 -->
-                <tr id="phase_row" style="display: none;">
-                    <th width="25%" class="text-start align-middle">
-                        If YES, which phase? <span class="required-star">*</span>
-                    </th>
-                    <th width="25%" class="text-start align-middle">
-                        <select name="reviewed_phase" id="reviewed_phase" class="form-select">
-                            <option value="">-Select-</option>
-                            <option value="Planning">Planning</option>
-                            <option value="Design">Design</option>
-                            <option value="Construction">Construction</option>
-                        </select>
-                    </th>
-                    <th class="align-middle"></th>
-                </tr>
-        
-                <!-- Question 3 -->
-                <tr>
-                    <th width="25%" class="text-start align-middle">
-                        Is this project now being assessed for next phase? <span class="required-star">*</span>
-                    </th>
-                    <th width="25%" class="text-start align-middle">
-                        <select name="next_phase" id="next_phase" class="form-select" required>
-                            <option value="">-Select-</option>
-                            <option value="YES">YES</option>
-                            <option value="NO">NO</option>
-                        </select>
-                    </th>
-                    <th class="align-middle"></th>
-                </tr>
-            </thead>
-        </table>
-        
-        
-        
-        <input type="hidden" value="cost_at_design" name="cost_phase">
-        <input type="hidden" value="{{ $project->id }}" name="updatedProjectId">
+            @csrf
+    
+            <table class="table table-sm align-start table-nowrap mb-0">
+                <thead>
+    
+                    <!-- Question 1 -->
+                    <tr>
+                        <td width="25%" >
+                            <label class="form-label"> Has this project been reviewed by CSA before?</label>
+                            <span class="required-star">*</span>
+                        </td>
+                        <td width="25%" class="text-start align-middle py-1">
+                            <select name="reviewed_before" id="reviewed_before"
+                                    class="form-select form-select-sm" required>
+                                <option value="">-Select-</option>
+                                <option value="YES">YES</option>
+                                <option value="NO">NO</option>
+                            </select>
+                        </td>
+                        <th class="align-middle"></th>
+                    </tr>
+    
+                    <!-- Question 2 -->
+                    <tr id="phase_row" style="display: none;">
+                        <td width="25%" class="text-start align-middle py-1">
+                            <label class="form-label">If YES, which phase?</label>
+                            <span class="required-star">*</span>
+                        </td>
+                        <td width="25%" class="text-start align-middle py-1">
+                            <select name="reviewed_phase" id="reviewed_phase"
+                                    class="form-select form-select-sm">
+                                <option value="">-Select-</option>
+                                <option value="Planning">Planning</option>
+                                <option value="Design">Design</option>
+                                <option value="Construction">Construction</option>
+                            </select>
+                        </td>
+                        <td class="align-middle"></td>
+                    </tr>
+    
+                    <!-- Question 3 -->
+                    <tr>
+                        <td width="25%" class="text-start align-middle py-2">
+                            <label class="form-label"> Is this project now being assessed for next phase?</label>
+                            <span class="required-star">*</span>
+                        </td>
+                        <td width="25%" class="text-start align-middle py-1">
+                            <select name="next_phase" id="next_phase"
+                                    class="form-select form-select-sm" required>
+                                <option value="">-Select-</option>
+                                <option value="YES">YES</option>
+                                <option value="NO">NO</option>
+                            </select>
+                        </td>
+                        <td class="align-middle"></td>
+                    </tr>
+    
+                </thead>
+            </table>
+    
+            <input type="hidden" value="cost_at_design" name="cost_phase">
+            <input type="hidden" value="{{ $project->id }}" name="updatedProjectId">
         </form>
     </div>
 
@@ -68,7 +75,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body py-2">
                         <div class="live-preview">
                             <div class="row gy-4">
                                 {{-- Project Name --}}
@@ -116,7 +123,7 @@
                         </div>
                     </div>
                                 
-                    <div class="card-body">
+                    <div class="card-body py-2">
                         <div class="live-preview">
                             <div class="row gy-4">
                                 {{-- Start Date --}}
@@ -163,7 +170,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body py-2">
                         <div class="live-preview">
                             <div class="row gy-4">
                                 <div class="col-xxl-3 col-md-6">
@@ -192,7 +199,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body py-2">
                         <div class="live-preview">
                             <div class="row gy-4">
                                 {{-- Building Type --}}
@@ -240,6 +247,13 @@
                                         <option value="">Construction</option>
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body py-2">
+                        <div class="live-preview">
+                            <div class="row gy-4">
+
 
                                 {{-- Mandatory Requirement --}}
                                 <div class="col-xxl-6 col-md-6">
@@ -256,19 +270,20 @@
                                 <input type="hidden" name="output_3" id="output_3" value="{{ $thresholds->output_3 }}">
                             </div>
                         </div>
+                        <div class="d-flex align-items-start gap-3 mt-0 py-3">
+                            <button type="submit" class="btn btn-sm btn-green-heading">
+                                Update Project
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm btn-label right ms-auto next-step"
+                                data-next="#step2" onclick="window.location.href='{{ route('projects.esummary', $project->id) }}'">
+                                <i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Go to Ex. Summary
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        {{-- Form Buttons --}}
-        <div class="d-flex align-items-start gap-3 mt-4">
-            <button type="submit" class="btn btn-success">Update Project</button>
-            <button type="button" class="btn btn-success btn-label right ms-auto next-step"
-                data-next="#step2" onclick="window.location.href='{{ route('projects.esummary', $project->id) }}'">
-                <i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Go to Ex. Summary
-            </button>
-        </div>
+        
     </form>
     
 </x-tab-layout>

@@ -11,7 +11,7 @@
             Dashboards
         @endslot
         @slot('title')
-        <div class="text-green-heading">Project's Green Building Assurance Performances</div>
+        
         @endslot
     @endcomponent
 

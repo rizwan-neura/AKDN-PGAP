@@ -9,4 +9,6 @@
 <link href="{{ URL::asset('build/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 <!-- custom Css-->
 <link href="{{ URL::asset('build/css/custom.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
+<!-- sidebar Css-->
+<link href="{{ URL::asset('build/css/pgap-sidebar.css') }}" rel="stylesheet">
 {{-- @yield('css') --}}
